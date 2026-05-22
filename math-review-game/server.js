@@ -9,28 +9,380 @@ const io = new Server(server);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ── Default Question Bank ────────────────────────────────────────────────────
+// ── Default Question Bank (aligned to Final Review Packet 2026) ──────────────
 const DEFAULT_QUESTIONS = [
-  { text: 'Solve for x:  2x + 5 = 13', answer: 'x = 4', points: 100 },
-  { text: 'Factor completely:  x² − 9', answer: '(x + 3)(x − 3)', points: 100 },
-  { text: 'Simplify:  (3x²)(2x³)', answer: '6x⁵', points: 100 },
-  { text: 'What is the slope of the line  y = −3x + 7?', answer: '−3', points: 100 },
-  { text: 'Solve:  x² − 5x + 6 = 0', answer: 'x = 2  or  x = 3', points: 100 },
-  { text: 'Find the y-intercept of  2x − 3y = 12', answer: '(0, −4)  or  y = −4', points: 100 },
-  { text: 'Evaluate  f(x) = x² + 2x − 1  at  x = 3', answer: '14', points: 100 },
-  { text: 'Simplify:  √48', answer: '4√3', points: 100 },
-  { text: 'Area of a circle with radius 5  (leave in terms of π)', answer: '25π', points: 100 },
-  { text: 'Distance between  (1, 2)  and  (4, 6)', answer: '5', points: 100 },
-  { text: 'Solve the system:  x + y = 7  and  x − y = 3', answer: 'x = 5,  y = 2', points: 200 },
-  { text: 'What is the vertex of  y = x² − 4x + 1?', answer: '(2, −3)', points: 200 },
-  { text: 'Expand:  (x + 3)²', answer: 'x² + 6x + 9', points: 100 },
-  { text: 'Find the equation of a line with slope 2 passing through (0, 5)', answer: 'y = 2x + 5', points: 100 },
-  { text: 'What is the sum of interior angles of a pentagon?', answer: '540°', points: 100 },
-  { text: 'Simplify:  (x² − 4) ÷ (x + 2)', answer: 'x − 2', points: 200 },
-  { text: 'If f(x) = 2x + 1 and g(x) = x², find  f(g(3))', answer: '19', points: 200 },
-  { text: 'Solve:  |2x − 3| = 7', answer: 'x = 5  or  x = −2', points: 200 },
-  { text: 'What is the median of:  3, 7, 1, 9, 4, 8, 2?', answer: '4', points: 100 },
-  { text: 'Simplify:  (2³)² ÷ 2⁴', answer: '4  or  2²', points: 100 },
+
+  // ── UNIT 1: Basic Foundations ─────────────────────────────────────────────
+
+  {
+    unit: 'Unit 1 – Order of Operations',
+    text: 'Simplify:  12 + 7 − 5 × 6 + 1',
+    answer: '-10',
+    points: 100,
+  },
+  {
+    unit: 'Unit 1 – Order of Operations',
+    text: 'What is the FIRST step when simplifying:  5 + 18 ÷ 3 × 2?',
+    answer: '18 ÷ 3  (division before addition, left to right)',
+    points: 100,
+  },
+  {
+    unit: 'Unit 1 – Distributive Property',
+    text: 'Simplify:  −4(3x − 9)',
+    answer: '−12x + 36',
+    points: 100,
+  },
+  {
+    unit: 'Unit 1 – Distributive Property',
+    text: 'Simplify:  5(x² − 6x + 2)',
+    answer: '5x² − 30x + 10',
+    points: 100,
+  },
+  {
+    unit: 'Unit 1 – Combining Like Terms',
+    text: 'Simplify:  2x + 8 − 7y + 2y − 1 − 9x',
+    answer: '−7x − 5y + 7',
+    points: 100,
+  },
+  {
+    unit: 'Unit 1 – Combining Like Terms',
+    text: 'Simplify:  x² + 9 − 8x + 3x² − 10',
+    answer: '4x² − 8x − 1',
+    points: 100,
+  },
+  {
+    unit: 'Unit 1 – Evaluating Expressions',
+    text: 'Evaluate  2x² + 3y  when  x = 4  and  y = 6',
+    answer: '50',
+    points: 100,
+  },
+  {
+    unit: 'Unit 1 – Evaluating Expressions',
+    text: 'Evaluate  a² − b  when  a = −2  and  b = 5',
+    answer: '−1',
+    points: 100,
+  },
+  {
+    unit: 'Unit 1 – Evaluating Expressions',
+    text: 'Evaluate  2a + 3b  when  a = −2  and  b = 5',
+    answer: '11',
+    points: 100,
+  },
+
+  // ── UNIT 2: Algebraic Equations ───────────────────────────────────────────
+
+  {
+    unit: 'Unit 2 – One & Two-Step Equations',
+    text: 'Solve:  5x − 8 = 32',
+    answer: 'x = 8',
+    points: 100,
+  },
+  {
+    unit: 'Unit 2 – One & Two-Step Equations',
+    text: 'Solve:  4x + 3 − 2 = 6  (combine like terms first)',
+    answer: 'x = 5/4  or  x = 1.25',
+    points: 100,
+  },
+  {
+    unit: 'Unit 2 – Multi-Step Equations',
+    text: 'Solve:  9n − 6 = 5n + 18',
+    answer: 'n = 6',
+    points: 100,
+  },
+  {
+    unit: 'Unit 2 – Multi-Step Equations',
+    text: 'Solve:  3(x − 4) + 5 = 20',
+    answer: 'x = 9',
+    points: 200,
+  },
+  {
+    unit: 'Unit 2 – Multi-Step Equations',
+    text: 'Solve:  2(3x + 4) = 4x + 20',
+    answer: 'x = 6',
+    points: 200,
+  },
+  {
+    unit: 'Unit 2 – Multi-Step Equations',
+    text: 'Solve:  5(x − 2) + 3x = 2(x + 6)',
+    answer: 'x = 3',
+    points: 300,
+  },
+
+  // ── UNIT 3: Algebraic Inequalities ────────────────────────────────────────
+
+  {
+    unit: 'Unit 3 – Solving Inequalities',
+    text: 'Solve:  −3x < 18',
+    answer: 'x > −6  (inequality flips when dividing by negative)',
+    points: 100,
+  },
+  {
+    unit: 'Unit 3 – Solving Inequalities',
+    text: 'Solve:  3(x − 5) ≤ 15',
+    answer: 'x ≤ 10',
+    points: 100,
+  },
+  {
+    unit: 'Unit 3 – Solving Inequalities',
+    text: 'Solve:  −6x − 4 > 2x − 20',
+    answer: 'x < 2',
+    points: 200,
+  },
+  {
+    unit: 'Unit 3 – Compound Inequalities',
+    text: 'Solve the compound inequality:  −2 < x − 2 ≤ 5',
+    answer: '0 < x ≤ 7',
+    points: 200,
+  },
+  {
+    unit: 'Unit 3 – Inequality Word Problems',
+    text: 'A movie ticket costs $16. You have at most $50. Which inequality shows how many tickets t you can buy?',
+    answer: '16t ≤ 50',
+    points: 100,
+  },
+  {
+    unit: 'Unit 3 – Inequality Word Problems',
+    text: 'Write the inequality: "Three more than a number is at least 10"',
+    answer: 'x + 3 ≥ 10',
+    points: 100,
+  },
+
+  // ── UNIT 4: Graphing ──────────────────────────────────────────────────────
+
+  {
+    unit: 'Unit 4 – Slope',
+    text: 'What is the slope of the line  y = −2x + 3?',
+    answer: '−2',
+    points: 100,
+  },
+  {
+    unit: 'Unit 4 – Slope',
+    text: 'Find the slope between the points  (4, 3)  and  (8, 6)',
+    answer: '3/4  or  0.75',
+    points: 100,
+  },
+  {
+    unit: 'Unit 4 – Slope',
+    text: 'Find the slope between the points  (−1, −2)  and  (2, 7)',
+    answer: '3',
+    points: 100,
+  },
+  {
+    unit: 'Unit 4 – Slope',
+    text: 'What type of slope does a horizontal line have?',
+    answer: 'Zero slope',
+    points: 100,
+  },
+  {
+    unit: 'Unit 4 – Slope-Intercept',
+    text: 'What is the y-intercept of the line  y = (1/3)x − 1?',
+    answer: '(0, −1)  or  −1',
+    points: 100,
+  },
+  {
+    unit: 'Unit 4 – Slope-Intercept',
+    text: 'Write the equation of the line with slope −2 and y-intercept 5',
+    answer: 'y = −2x + 5',
+    points: 100,
+  },
+
+  // ── UNIT 5: Solving Systems ───────────────────────────────────────────────
+
+  {
+    unit: 'Unit 5 – Systems (Substitution)',
+    text: 'Solve the system by substitution:\n  y = 4x + 1\n  y = 2x + 5',
+    answer: '(2, 9)',
+    points: 200,
+  },
+  {
+    unit: 'Unit 5 – Systems (Substitution)',
+    text: 'Solve the system by substitution:\n  3x − 2y = −11\n  x = −2y + 7',
+    answer: '(−1, 4)',
+    points: 300,
+  },
+  {
+    unit: 'Unit 5 – Systems (Elimination)',
+    text: 'Solve the system by elimination:\n  2x + 3y = 15\n  x − 3y = 3',
+    answer: '(6, 1)',
+    points: 200,
+  },
+  {
+    unit: 'Unit 5 – Systems (Elimination)',
+    text: 'Solve the system by elimination:\n  4x + 5y = 23\n  9x − 5y = −6',
+    answer: '(1, 19/5)  or  (1, 3.8)',
+    points: 300,
+  },
+  {
+    unit: 'Unit 5 – Systems (Substitution)',
+    text: 'Solve the system:\n  y = 3x − 21\n  y = −2x + 19',
+    answer: '(8, 3)',
+    points: 200,
+  },
+
+  // ── UNIT 6: Functions ─────────────────────────────────────────────────────
+
+  {
+    unit: 'Unit 6 – Identifying Functions',
+    text: 'Is the relation  {(1, 2), (2, 4), (3, 2), (1, 5)}  a function?  Why or why not?',
+    answer: 'No — the x-value 1 repeats with two different y-values',
+    points: 100,
+  },
+  {
+    unit: 'Unit 6 – Identifying Functions',
+    text: 'What test do we use to determine if a GRAPH represents a function?',
+    answer: 'The Vertical Line Test',
+    points: 100,
+  },
+  {
+    unit: 'Unit 6 – Domain & Range',
+    text: 'What is the DOMAIN of the function  {(2, 5), (4, 8), (6, 11)}?',
+    answer: '{2, 4, 6}',
+    points: 100,
+  },
+  {
+    unit: 'Unit 6 – Domain & Range',
+    text: 'What is the RANGE of the function  {(−1, 3), (0, 3), (4, 7)}?',
+    answer: '{3, 7}',
+    points: 100,
+  },
+  {
+    unit: 'Unit 6 – Types of Functions',
+    text: 'A graph is shaped like a U (or upside-down U). What type of function is it?',
+    answer: 'Quadratic',
+    points: 100,
+  },
+  {
+    unit: 'Unit 6 – Types of Functions',
+    text: 'A graph grows rapidly — doubling or tripling. What type of function is it?',
+    answer: 'Exponential',
+    points: 100,
+  },
+
+  // ── UNIT 7: Polynomials ───────────────────────────────────────────────────
+
+  {
+    unit: 'Unit 7 – Degree & Leading Coefficient',
+    text: 'What is the DEGREE of the polynomial:  3x³ + 2x² − 11?',
+    answer: '3',
+    points: 100,
+  },
+  {
+    unit: 'Unit 7 – Degree & Leading Coefficient',
+    text: 'What is the LEADING COEFFICIENT of:  −5x⁴ + 3x² − x + 8?',
+    answer: '−5',
+    points: 100,
+  },
+  {
+    unit: 'Unit 7 – Exponent Rules',
+    text: 'Simplify:  x³ · x⁵',
+    answer: 'x⁸',
+    points: 100,
+  },
+  {
+    unit: 'Unit 7 – Exponent Rules',
+    text: 'Simplify:  y⁷ ÷ y²',
+    answer: 'y⁵',
+    points: 100,
+  },
+  {
+    unit: 'Unit 7 – Exponent Rules',
+    text: 'Simplify:  (2a²)(3a⁵)',
+    answer: '6a⁷',
+    points: 100,
+  },
+  {
+    unit: 'Unit 7 – Adding Polynomials',
+    text: 'Find the sum:  (4x² − 3x + 6) + (−7x² + 3x + 6)',
+    answer: '−3x² + 12',
+    points: 100,
+  },
+  {
+    unit: 'Unit 7 – Subtracting Polynomials',
+    text: 'Find the difference:  (6y² − 3y + 1) − (2y² + 4y − 5)',
+    answer: '4y² − 7y + 6',
+    points: 200,
+  },
+  {
+    unit: 'Unit 7 – Multiplying Polynomials',
+    text: 'Multiply:  (x + 3)(x + 5)',
+    answer: 'x² + 8x + 15',
+    points: 200,
+  },
+  {
+    unit: 'Unit 7 – Multiplying Polynomials',
+    text: 'Multiply:  (2x + 5)(x − 4)',
+    answer: '2x² − 3x − 20',
+    points: 200,
+  },
+  {
+    unit: 'Unit 7 – Standard Form',
+    text: 'Put in standard form, then state its DEGREE:  4 − 2x³ + 7x − x²',
+    answer: '−2x³ − x² + 7x + 4 ,  degree = 3',
+    points: 200,
+  },
+
+  // ── UNIT 8: Factoring ─────────────────────────────────────────────────────
+
+  {
+    unit: 'Unit 8 – GCF',
+    text: 'Factor using GCF:  6x³ + 9x²',
+    answer: '3x²(2x + 3)',
+    points: 100,
+  },
+  {
+    unit: 'Unit 8 – GCF',
+    text: 'Factor using GCF:  8y⁴ − 12y²',
+    answer: '4y²(2y² − 3)',
+    points: 100,
+  },
+  {
+    unit: 'Unit 8 – Difference of Two Squares',
+    text: 'Factor using DOTS:  x² − 49',
+    answer: '(x + 7)(x − 7)',
+    points: 100,
+  },
+  {
+    unit: 'Unit 8 – Difference of Two Squares',
+    text: 'Factor using DOTS:  9a² − 16b²',
+    answer: '(3a + 4b)(3a − 4b)',
+    points: 200,
+  },
+  {
+    unit: 'Unit 8 – Factoring Trinomials',
+    text: 'Factor:  x² + 7x + 12',
+    answer: '(x + 3)(x + 4)',
+    points: 100,
+  },
+  {
+    unit: 'Unit 8 – Factoring Trinomials',
+    text: 'Factor:  x² − 9x + 8',
+    answer: '(x − 1)(x − 8)',
+    points: 100,
+  },
+  {
+    unit: 'Unit 8 – Factoring Trinomials',
+    text: 'Factor:  x² + 10x + 25',
+    answer: '(x + 5)²',
+    points: 100,
+  },
+  {
+    unit: 'Unit 8 – Factor Completely',
+    text: 'Factor COMPLETELY:  2x³ − 32x',
+    answer: '2x(x + 4)(x − 4)',
+    points: 300,
+  },
+  {
+    unit: 'Unit 8 – Factor Completely',
+    text: 'Factor COMPLETELY:  5x² + 20x + 20',
+    answer: '5(x + 2)²',
+    points: 300,
+  },
+  {
+    unit: 'Unit 8 – Factor Completely',
+    text: 'Factor COMPLETELY:  3x² + 15x + 18',
+    answer: '3(x + 2)(x + 3)',
+    points: 300,
+  },
 ];
 
 // ── Game State ────────────────────────────────────────────────────────────────

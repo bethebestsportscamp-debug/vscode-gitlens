@@ -42,11 +42,20 @@
       align-items: center;
       justify-content: center;
     }
+    .unit-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
     .question-text {
       font-size: clamp(1.4rem, 3vw, 2.4rem);
       font-weight: 700;
-      line-height: 1.5;
+      line-height: 1.6;
       letter-spacing: .3px;
+      white-space: pre-wrap;
     }
 
     /* ── Buzz Section ────────────────────────────────────────────────────── */
@@ -331,6 +340,7 @@
     <!-- Question view -->
     <div id="questionView" style="display:none;flex-direction:column;gap:20px">
       <div id="questionBox" class="card question-box">
+        <div id="unitLabel" class="unit-label"></div>
         <div id="questionText" class="question-text"></div>
       </div>
 
@@ -460,7 +470,8 @@ function renderLobby() {
     <div class="q-item">
       <span class="q-item-num">${i + 1}.</span>
       <div style="flex:1">
-        <div class="q-item-text">${esc(q.text)}</div>
+        ${q.unit ? `<div style="font-size:.7rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">${esc(q.unit)}</div>` : ''}
+        <div class="q-item-text" style="white-space:pre-wrap">${esc(q.text)}</div>
         <div class="q-item-ans">✓ ${esc(q.answer)}</div>
       </div>
       <span class="q-item-pts">${q.points}pts</span>
@@ -473,6 +484,7 @@ function renderQuestion() {
   const s = gameState;
   if (!s.currentQ) return;
 
+  document.getElementById('unitLabel').textContent  = s.currentQ.unit || '';
   document.getElementById('questionText').textContent = s.currentQ.text;
 
   const buzzSec   = document.getElementById('buzzSection');

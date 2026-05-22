@@ -150,9 +150,11 @@
     .q-display p {
       font-size: clamp(1.2rem, 3vw, 2rem);
       font-weight: 700;
-      line-height: 1.55;
+      line-height: 1.6;
+      white-space: pre-wrap;
     }
-    .q-label { font-size: .75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .q-label { font-size: .75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .q-unit  { font-size: .8rem;  font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
 
     /* ── Buzz Button ─────────────────────────────────────────────────────── */
     .buzz-zone {
@@ -678,6 +680,7 @@ function buildQuestionHTML() {
     <div class="q-area">
       <div class="card q-display">
         <div class="q-label">Question ${s.qIndex + 1} of ${s.questions.length} · ${s.currentQ.points} pts</div>
+        ${s.currentQ.unit ? `<div class="q-unit">${esc(s.currentQ.unit)}</div>` : ''}
         <p>${esc(s.currentQ.text)}</p>
       </div>
       ${actionHTML}
