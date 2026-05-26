@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math Review Game – Host Board</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    body { display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
+
+    /* ── Top Bar ──────────────────────────────────────────────────────────── */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 28px;
+      background: rgba(0,0,0,.4);
+      border-bottom: 1px solid var(--card-border);
+      flex-shrink: 0;
+    }
+    .top-bar h1 { font-size: 1.3rem; font-weight: 800; letter-spacing: 1px; color: var(--gold); }
+    .q-counter { font-size: 1rem; color: var(--muted); font-weight: 600; }
+
+    /* ── Main Layout ─────────────────────────────────────────────────────── */
+    .main { display: flex; flex: 1; gap: 0; }
+
+    /* ── Game Area (left) ────────────────────────────────────────────────── */
+    .game-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 28px 32px;
+      gap: 20px;
+    }
+
+    /* ── Question Box ────────────────────────────────────────────────────── */
+    .question-box {
+      padding: 32px 40px;
+      text-align: center;
+      min-height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .unit-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .question-text {
+      font-size: clamp(1.4rem, 3vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.6;
+      letter-spacing: .3px;
+      white-space: pre-wrap;
+    }
+
+    /* ── Buzz Section ────────────────────────────────────────────────────── */
+    .buzz-section {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .buzz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .who-buzzed {
+      font-size: 1.4rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .timer-label {
+      font-size: 2rem;
+      font-weight: 900;
+      min-width: 52px;
+      text-align: right;
+    }
+    .answer-display {
+      padding: 20px 28px;
+      font-size: clamp(1.2rem, 2.5vw, 2rem);
+      font-weight: 600;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      letter-spacing: .5px;
+      border-left: 4px solid var(--buzz);
+      word-break: break-word;
+      position: relative;
+    }
+    .answer-placeholder { color: var(--muted); font-style: italic; font-size: 1.1rem; font-weight: 400; }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.1em;
+      background: currentColor;
+      margin-left: 3px;
+      vertical-align: middle;
+      animation: pulse 0.8s steps(1) infinite;
+    }
+
+    /* ── Judge Buttons ───────────────────────────────────────────────────── */
+    .judge-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+    }
+    .judge-row .btn { font-size: 1.2rem; padding: 14px 36px; }
+
+    /* ── Correct/Wrong overlay ───────────────────────────────────────────── */
+    .verdict {
+      display: none;
+      position: fixed;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(4rem, 12vw, 9rem);
+      font-weight: 900;
+      letter-spacing: 4px;
+      z-index: 100;
+      pointer-events: none;
+      text-shadow: 0 0 60px currentColor;
+    }
+    .verdict.show { display: flex; animation: zoomIn .4s cubic-bezier(.22,1,.36,1); }
+    .verdict.correct { color: var(--correct); background: rgba(0,230,118,.08); }
+    .verdict.wrong   { color: var(--wrong);   background: rgba(255,23,68,.08); }
+    .verdict.steal   { color: var(--steal);   background: rgba(255,145,0,.08); }
+
+    /* ── Steal Banner ────────────────────────────────────────────────────── */
+    .steal-banner {
+      padding: 18px 28px;
+      background: rgba(255,145,0,.15);
+      border: 2px solid var(--steal);
+      border-radius: var(--radius);
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--steal);
+      display: none;
+    }
+    .steal-banner.show { display: block; animation: zoomIn .35s ease-out; }
+
+    /* ── Lobby / Setup Panel ─────────────────────────────────────────────── */
+    .lobby-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 680px;
+      margin: 0 auto;
+      width: 100%;
+      padding-bottom: 32px;
+    }
+    .lobby-panel h2 { font-size: 1.5rem; font-weight: 800; text-align: center; color: var(--gold); margin-top: 8px; }
+
+    .q-list { display: flex; flex-direction: column; gap: 10px; max-height: 340px; overflow-y: auto; }
+    .q-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      font-size: .9rem;
+    }
+    .q-item-num { color: var(--muted); font-weight: 700; flex-shrink: 0; min-width: 24px; }
+    .q-item-text { flex: 1; font-weight: 500; }
+    .q-item-ans { color: var(--correct); font-size: .8rem; margin-top: 2px; }
+    .q-item-pts { color: var(--gold); font-size: .8rem; margin-top: 2px; flex-shrink: 0; }
+    .q-item button { background: none; border: none; color: var(--wrong); cursor: pointer; font-size: 1rem; flex-shrink: 0; }
+
+    .add-q-form { display: flex; flex-direction: column; gap: 10px; }
+    .add-q-form input, .add-q-form textarea {
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 10px 14px;
+      font-size: .95rem;
+      font-family: inherit;
+      resize: none;
+    }
+    .add-q-form input:focus, .add-q-form textarea:focus {
+      outline: none;
+      border-color: #5c6bc0;
+    }
+    .add-q-row { display: flex; gap: 10px; }
+    .add-q-row input { flex: 1; }
+
+    /* ── Sidebar (host controls) ─────────────────────────────────────────── */
+    .sidebar {
+      width: 280px;
+      flex-shrink: 0;
+      background: rgba(0,0,0,.3);
+      border-left: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 16px;
+      gap: 18px;
+      overflow-y: auto;
+    }
+    .sidebar h3 {
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 8px;
+    }
+
+    /* ── Score Board ─────────────────────────────────────────────────────── */
+    .scoreboard { display: flex; flex-direction: column; gap: 10px; }
+    .score-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      transition: border-color .3s;
+    }
+    .score-row.active-team { border-color: var(--buzz); background: rgba(124,77,255,.15); }
+    .score-row .avatar { font-size: 1.4rem; }
+    .score-row .tname { flex: 1; font-weight: 700; font-size: .9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .score-row .pts   { font-size: 1.1rem; font-weight: 800; color: var(--gold); }
+    .score-adj { display: flex; gap: 4px; margin-left: 4px; }
+    .score-adj button {
+      background: rgba(255,255,255,.1);
+      border: none;
+      border-radius: 6px;
+      color: var(--text);
+      cursor: pointer;
+      font-size: .85rem;
+      padding: 3px 7px;
+      font-weight: 700;
+    }
+    .score-adj button:hover { background: rgba(255,255,255,.2); }
+    .dot-offline { width: 8px; height: 8px; border-radius: 50%; background: #555; flex-shrink: 0; }
+    .dot-online  { background: var(--correct); }
+
+    .ctrl-row { display: flex; flex-direction: column; gap: 8px; }
+    .ctrl-row .btn { width: 100%; }
+
+    /* ── Game over ───────────────────────────────────────────────────────── */
+    .game-over-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      padding: 40px 20px;
+      width: 100%;
+    }
+    .game-over-panel h2 { font-size: 3rem; font-weight: 900; color: var(--gold); text-align: center; }
+    .final-scores { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 540px; }
+    .final-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 24px;
+      border-radius: 14px;
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+    .final-row .rank { font-size: 2rem; width: 48px; text-align: center; }
+    .final-row .f-avatar { font-size: 2rem; }
+    .final-row .f-name  { flex: 1; }
+    .final-row .f-pts   { color: var(--gold); font-size: 1.5rem; }
+
+    /* ── Waiting indicator ───────────────────────────────────────────────── */
+    .waiting-msg {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1.1rem;
+      padding: 40px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .correct-ans-reveal {
+      background: rgba(0,230,118,.1);
+      border: 1px solid var(--correct);
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 1rem;
+      color: var(--correct);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top Bar ──────────────────────────────────────────────────────────── -->
+<div class="top-bar">
+  <h1>⚡ MATH REVIEW GAME</h1>
+  <span id="qCounter" class="q-counter"></span>
+</div>
+
+<!-- ── Main Content ─────────────────────────────────────────────────────── -->
+<div class="main">
+
+  <!-- Game Area -->
+  <div id="gameArea" class="game-area">
+    <!-- Lobby -->
+    <div id="lobbyView" class="lobby-panel" style="display:none">
+      <h2>🎓 Game Setup</h2>
+
+      <div class="card" style="padding:20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <span style="font-weight:700">Question Bank  <span id="qBankCount" style="color:var(--gold)"></span></span>
+          <button class="btn btn-ghost" style="font-size:.8rem;padding:6px 12px" onclick="resetQBank()">Reset to Defaults</button>
+        </div>
+        <div id="qList" class="q-list"></div>
+      </div>
+
+      <div class="card" style="padding:20px">
+        <div style="font-weight:700;margin-bottom:12px">Add Custom Question</div>
+        <div class="add-q-form">
+          <textarea id="newQText" placeholder="Question text (you can use ² ³ √ etc.)" rows="2"></textarea>
+          <div class="add-q-row">
+            <input id="newQAns" placeholder="Answer" />
+            <input id="newQPts" placeholder="Pts" type="number" value="100" style="width:90px;flex:none" />
+          </div>
+          <button class="btn btn-primary" onclick="addQuestion()">+ Add Question</button>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:8px">
+        <button id="startBtn" class="btn btn-gold btn-big" onclick="startGame()">🚀 Start Game!</button>
+      </div>
+    </div>
+
+    <!-- Question view -->
+    <div id="questionView" style="display:none;flex-direction:column;gap:20px">
+      <div id="questionBox" class="card question-box">
+        <div id="unitLabel" class="unit-label"></div>
+        <div id="questionText" class="question-text"></div>
+      </div>
+
+      <div id="buzzSection" class="buzz-section" style="display:none">
+        <div class="buzz-header">
+          <div id="whoBuzzed" class="who-buzzed"></div>
+          <div id="timerLabel" class="timer-label"></div>
+        </div>
+        <div class="timer-wrap"><div id="timerBar" class="timer-bar"></div></div>
+        <div id="answerDisplay" class="card answer-display">
+          <span class="answer-placeholder">Waiting for team to type...</span>
+        </div>
+        <div id="judgeRow" class="judge-row" style="display:none">
+          <button class="btn btn-success" style="font-size:1.2rem;padding:14px 36px" onclick="judge(true)">✓ CORRECT</button>
+          <button class="btn btn-danger"  style="font-size:1.2rem;padding:14px 36px" onclick="judge(false)">✗ WRONG</button>
+        </div>
+        <div id="correctAnsReveal" class="correct-ans-reveal" style="display:none"></div>
+      </div>
+
+      <div id="stealBanner" class="steal-banner">
+        🔥 STEAL OPPORTUNITY!  First team to buzz wins 30 seconds to answer!
+        <span id="stealTimer" style="margin-left:12px;font-size:1.6rem"></span>
+      </div>
+
+      <div id="waitingMsg" class="waiting-msg">Waiting for a team to buzz in…</div>
+    </div>
+
+    <!-- Game Over -->
+    <div id="gameOverView" class="game-over-panel" style="display:none">
+      <h2>🏆 FINAL SCORES 🏆</h2>
+      <div id="finalScores" class="final-scores"></div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h3>Teams</h3>
+    <div id="scoreboard" class="scoreboard">
+      <div style="color:var(--muted);font-size:.9rem;text-align:center">Waiting for teams…</div>
+    </div>
+
+    <h3>Controls</h3>
+    <div class="ctrl-row" id="hostControls">
+      <button id="skipBtn" class="btn btn-ghost" onclick="skipQuestion()" style="display:none">⏭ Skip Question</button>
+      <button id="resetBtn" class="btn btn-danger" onclick="confirmReset()">↺ Reset Game</button>
+    </div>
+
+    <div id="answerKey" style="display:none">
+      <h3>Answer Key</h3>
+      <div id="answerKeyText" style="font-size:.95rem;color:var(--correct);font-weight:600;padding:8px;background:rgba(0,230,118,.08);border-radius:8px;border:1px solid rgba(0,230,118,.3)"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Verdict Overlay ───────────────────────────────────────────────────── -->
+<div id="verdictOverlay" class="verdict"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="sounds.js"></script>
+<script>
+const socket = io();
+socket.emit('host:join');
+
+let gameState = null;
+let timerInterval = null;
+let lastBeepSec = null;
+let prevPhase = null;
+const CONFETTI = ['🎉','⭐','✨','🌟','💫','🎊','🏆','🎯'];
+
+// Unlock audio on first interaction (browser requirement)
+document.addEventListener('click', () => getCtx(), { once: true });
+
+// ── State Rendering ──────────────────────────────────────────────────────────
+socket.on('state', (s) => {
+  const wasPhase = gameState?.phase;
+  gameState = s;
+
+  // Phase-transition sounds
+  if (wasPhase !== s.phase) {
+    if (s.phase === 'steal')     Sounds.gooseHonk();
+    if (s.phase === 'game_over') setTimeout(() => Sounds.elephant(), 300);
+  }
+
+  prevPhase = wasPhase;
+  render();
+});
+
+socket.on('answer_update', ({ answer }) => {
+  if (!gameState) return;
+  gameState.currentAnswer = answer;
+  renderAnswer();
+});
+
+socket.on('buzz', ({ teamId }) => {
+  Sounds.quack();
+  buzzFlash(teamId);
+});
+
+socket.on('correct', ({ teamId, points }) => {
+  Sounds.fanfare();
+  Sounds.cheer();
+  showVerdict('correct', `✓ CORRECT  +${points}`);
+  spawnConfetti();
+});
+
+socket.on('wrong', ({ teamId }) => {
+  Sounds.sadTrombone();
+  showVerdict('wrong', '✗ WRONG');
+});
+
+socket.on('no_steal', () => {
+  Sounds.deflate();
+  showVerdict('steal', 'NO STEAL', 1500);
+});
+
+function render() {
+  const s = gameState;
+  document.getElementById('qCounter').textContent =
+    s.phase !== 'lobby' && s.phase !== 'game_over'
+      ? `Question ${s.qIndex + 1} / ${s.questions.length}`
+      : '';
+
+  renderScoreboard();
+
+  document.getElementById('lobbyView').style.display    = s.phase === 'lobby'     ? 'flex' : 'none';
+  document.getElementById('questionView').style.display = ['question','answering','judging','steal'].includes(s.phase) ? 'flex' : 'none';
+  document.getElementById('gameOverView').style.display = s.phase === 'game_over' ? 'flex' : 'none';
+
+  document.getElementById('skipBtn').style.display  = ['question','steal','judging'].includes(s.phase) ? 'block' : 'none';
+  document.getElementById('answerKey').style.display = s.currentQ ? 'block' : 'none';
+  if (s.currentQ) document.getElementById('answerKeyText').textContent = '→ ' + s.currentQ.answer;
+
+  if (s.phase === 'lobby')     renderLobby();
+  if (['question','answering','judging','steal'].includes(s.phase)) renderQuestion();
+  if (s.phase === 'game_over') renderGameOver();
+}
+
+function renderLobby() {
+  const s = gameState;
+  document.getElementById('qBankCount').textContent = `(${s.questions.length})`;
+  const list = document.getElementById('qList');
+  if (s.questions.length === 0) {
+    list.innerHTML = '<div style="color:var(--muted);text-align:center;padding:12px">No questions yet.</div>';
+    return;
+  }
+  list.innerHTML = s.questions.map((q, i) => `
+    <div class="q-item">
+      <span class="q-item-num">${i + 1}.</span>
+      <div style="flex:1">
+        ${q.unit ? `<div style="font-size:.7rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">${esc(q.unit)}</div>` : ''}
+        <div class="q-item-text" style="white-space:pre-wrap">${esc(q.text)}</div>
+        <div class="q-item-ans">✓ ${esc(q.answer)}</div>
+      </div>
+      <span class="q-item-pts">${q.points}pts</span>
+      <button onclick="removeQuestion(${i})" title="Remove">✕</button>
+    </div>
+  `).join('');
+}
+
+function renderQuestion() {
+  const s = gameState;
+  if (!s.currentQ) return;
+
+  document.getElementById('unitLabel').textContent  = s.currentQ.unit || '';
+  document.getElementById('questionText').textContent = s.currentQ.text;
+
+  const buzzSec   = document.getElementById('buzzSection');
+  const waitMsg   = document.getElementById('waitingMsg');
+  const stealBan  = document.getElementById('stealBanner');
+  const judgeRow  = document.getElementById('judgeRow');
+  const revealDiv = document.getElementById('correctAnsReveal');
+
+  buzzSec.style.display  = ['answering','judging','steal'].includes(s.phase) ? 'flex' : 'none';
+  waitMsg.style.display  = s.phase === 'question' ? 'block' : 'none';
+  stealBan.classList.toggle('show', s.phase === 'steal');
+  judgeRow.style.display = s.phase === 'judging' ? 'flex' : 'none';
+  revealDiv.style.display = s.phase === 'judging' ? 'block' : 'none';
+  if (s.phase === 'judging') {
+    revealDiv.textContent = '📖 Correct Answer: ' + s.currentQ.answer;
+  }
+
+  if (['answering','judging'].includes(s.phase) && s.activeBuzzTeam) {
+    const team = s.teams[s.activeBuzzTeam];
+    if (team) {
+      const badge = `<span style="color:${team.color}">${team.avatar} ${esc(team.name)}</span>`;
+      document.getElementById('whoBuzzed').innerHTML =
+        s.isSteal ? `🔥 STEAL: ${badge}` : `${badge} BUZZED IN!`;
+    }
+  }
+
+  renderAnswer();
+  renderTimer();
+}
+
+function renderAnswer() {
+  const s = gameState;
+  const el = document.getElementById('answerDisplay');
+  if (s.currentAnswer) {
+    el.innerHTML = esc(s.currentAnswer) + (s.phase === 'answering' ? '<span class="typing-cursor"></span>' : '');
+    el.style.color = 'var(--text)';
+  } else {
+    el.innerHTML = '<span class="answer-placeholder">Waiting for team to type…</span>';
+  }
+}
+
+function renderTimer() {
+  clearInterval(timerInterval);
+  const s = gameState;
+  if (!s.timerEnd) return;
+
+  const totalMs = s.phase === 'steal' ? 10000 : 30000;
+  const timerLabel = document.getElementById('timerLabel');
+  const timerBar   = document.getElementById('timerBar');
+  const stealTimer = document.getElementById('stealTimer');
+
+  lastBeepSec = null;
+
+  function tick() {
+    const remaining = Math.max(0, s.timerEnd - Date.now());
+    const secs = Math.ceil(remaining / 1000);
+    const pct  = (remaining / totalMs) * 100;
+
+    timerLabel.textContent = secs + 's';
+    stealTimer.textContent = secs + 's';
+
+    const hue = pct * 1.2; // green → red
+    timerBar.style.width = pct + '%';
+    timerBar.style.background = `hsl(${hue}, 90%, 55%)`;
+    timerLabel.style.color = `hsl(${hue}, 90%, 70%)`;
+
+    // Beep every second for last 5 seconds (urgent beep for last 2)
+    if (secs <= 5 && secs > 0 && secs !== lastBeepSec) {
+      lastBeepSec = secs;
+      Sounds.timerBeep(secs <= 2);
+    }
+
+    if (remaining === 0) clearInterval(timerInterval);
+  }
+  tick();
+  timerInterval = setInterval(tick, 250);
+}
+
+function renderScoreboard() {
+  const s = gameState;
+  const teams = Object.values(s.teams);
+  const el = document.getElementById('scoreboard');
+  if (teams.length === 0) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:.9rem;text-align:center">Waiting for teams…</div>';
+    return;
+  }
+  const sorted = [...teams].sort((a,b) => b.score - a.score);
+  el.innerHTML = sorted.map(t => `
+    <div class="score-row ${t.id === s.activeBuzzTeam ? 'active-team' : ''}" style="border-color:${t.id === s.activeBuzzTeam ? t.color : 'var(--card-border)'}">
+      <span class="dot-offline ${t.connected !== false ? 'dot-online' : ''}"></span>
+      <span class="avatar">${t.avatar}</span>
+      <span class="tname" style="color:${t.color}">${esc(t.name)}</span>
+      <span class="pts">${t.score}</span>
+      <div class="score-adj">
+        <button onclick="adjustScore('${t.id}', 100)" title="+100">+</button>
+        <button onclick="adjustScore('${t.id}', -100)" title="-100">−</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderGameOver() {
+  const s = gameState;
+  const teams = Object.values(s.teams).sort((a,b) => b.score - a.score);
+  const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
+  document.getElementById('finalScores').innerHTML = teams.map((t, i) => `
+    <div class="final-row card" style="border-color:${t.color};background:${i===0?'rgba(255,215,0,.1)':'var(--card)'}">
+      <span class="rank">${medals[i] || (i+1)}</span>
+      <span class="f-avatar">${t.avatar}</span>
+      <span class="f-name" style="color:${t.color}">${esc(t.name)}</span>
+      <span class="f-pts">${t.score} pts</span>
+    </div>
+  `).join('');
+  spawnConfetti();
+  spawnConfetti();
+}
+
+// ── Actions ──────────────────────────────────────────────────────────────────
+function addQuestion() {
+  const text = document.getElementById('newQText').value.trim();
+  const answer = document.getElementById('newQAns').value.trim();
+  const points = parseInt(document.getElementById('newQPts').value) || 100;
+  if (!text || !answer) { alert('Please enter both question and answer.'); return; }
+  socket.emit('host:add_question', { text, answer, points });
+  document.getElementById('newQText').value = '';
+  document.getElementById('newQAns').value  = '';
+  document.getElementById('newQPts').value  = '100';
+}
+
+function removeQuestion(i) {
+  socket.emit('host:remove_question', i);
+}
+
+function resetQBank() {
+  if (confirm('Reset to default questions? This will remove any custom questions.')) {
+    socket.emit('host:reset_questions');
+  }
+}
+
+function startGame() {
+  if (!gameState || gameState.questions.length === 0) {
+    alert('Add at least one question first!');
+    return;
+  }
+  const teamCount = Object.keys(gameState.teams).length;
+  if (teamCount === 0) {
+    if (!confirm('No teams have joined yet. Start anyway?')) return;
+  }
+  socket.emit('host:start_game');
+}
+
+function judge(correct) {
+  socket.emit('host:judge', correct);
+}
+
+function skipQuestion() {
+  socket.emit('host:skip');
+}
+
+function adjustScore(teamId, delta) {
+  socket.emit('host:adjust_score', { teamId, delta });
+}
+
+function confirmReset() {
+  if (confirm('Reset the game? Scores will be cleared and everyone returns to lobby.')) {
+    socket.emit('host:reset');
+  }
+}
+
+// ── Visual Effects ────────────────────────────────────────────────────────────
+function showVerdict(type, text, duration = 2000) {
+  const el = document.getElementById('verdictOverlay');
+  el.className = 'verdict show ' + type;
+  el.textContent = text;
+  setTimeout(() => { el.className = 'verdict'; el.textContent = ''; }, duration);
+}
+
+function buzzFlash(teamId) {
+  const team = gameState?.teams[teamId];
+  if (!team) return;
+  // Flash body border
+  document.body.style.outline = `6px solid ${team.color}`;
+  setTimeout(() => { document.body.style.outline = ''; }, 600);
+}
+
+function spawnConfetti() {
+  for (let i = 0; i < 12; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.textContent = CONFETTI[Math.floor(Math.random() * CONFETTI.length)];
+      el.style.left  = Math.random() * 100 + 'vw';
+      el.style.bottom = '0';
+      el.style.animationDuration = (.8 + Math.random() * .8) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 2000);
+    }, i * 80);
+  }
+}
+
+// ── Utils ─────────────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Handle reset questions from server
+socket.on('state', (s) => {
+  gameState = s;
+  render();
+});
+</script>
+</body>
+</html>
