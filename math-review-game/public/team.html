@@ -390,6 +390,7 @@
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
+<script src="sounds.js"></script>
 <script>
 // ── Config ────────────────────────────────────────────────────────────────────
 const AVATARS = ['🦁','🐯','🦊','🐻','🐼','🐸','🐙','🦉','🐉','🦄','🤖','🦅','🐬','🦋','🐺'];
@@ -412,6 +413,10 @@ let myColor     = COLORS[0].hex;
 let gameState   = null;
 let timerIv     = null;
 let hasJoined   = false;
+let lastTeamBeepSec = null;
+
+// Unlock audio on first tap/click (browser requirement)
+document.addEventListener('click', () => getCtx(), { once: true });
 
 // ── Socket ────────────────────────────────────────────────────────────────────
 const socket = io();
@@ -438,24 +443,33 @@ socket.on('state', (s) => {
 
 socket.on('buzz', ({ teamId }) => {
   if (teamId === myTeamId) {
-    playBuzz();
+    Sounds.quack();
     document.getElementById('gameContent').classList.add('anim-flash');
     setTimeout(() => document.getElementById('gameContent').classList.remove('anim-flash'), 1500);
   }
 });
 
 socket.on('correct', ({ teamId, points }) => {
-  if (teamId === myTeamId) spawnConfetti();
+  if (teamId === myTeamId) {
+    Sounds.fanfare();
+    Sounds.cheer();
+    spawnConfetti();
+  }
 });
 
 socket.on('wrong', ({ teamId }) => {
   if (teamId === myTeamId) {
+    Sounds.sadTrombone();
     document.getElementById('gameContent').classList.add('anim-shake');
     setTimeout(() => document.getElementById('gameContent').classList.remove('anim-shake'), 600);
   }
 });
 
-socket.on('no_steal', () => {});
+socket.on('no_steal', () => {
+  if (gameState && gameState.buzzedTeams.includes(myTeamId)) {
+    Sounds.deflate();
+  }
+});
 
 // ── Setup Screen ──────────────────────────────────────────────────────────────
 function buildSetupUI() {
@@ -718,11 +732,12 @@ function renderMyTimer() {
   if (!s.timerEnd) return;
   if (!['answering','steal'].includes(s.phase)) return;
 
+  const isMyTurn = s.activeBuzzTeam === myTeamId;
   const totalMs = s.phase === 'steal' ? 10000 : 30000;
   const numEl = document.getElementById('myTimerNum');
   const barEl = document.getElementById('myTimerBar');
 
-  if (!numEl) return;
+  lastTeamBeepSec = null;
 
   function tick() {
     const remaining = Math.max(0, s.timerEnd - Date.now());
@@ -735,6 +750,12 @@ function renderMyTimer() {
       const hue = pct * 1.2;
       barEl.style.background = `hsl(${hue}, 90%, 55%)`;
       if (numEl) numEl.style.color = `hsl(${hue}, 90%, 65%)`;
+    }
+
+    // Beep only when it's this team's turn to answer
+    if (isMyTurn && secs <= 5 && secs > 0 && secs !== lastTeamBeepSec) {
+      lastTeamBeepSec = secs;
+      Sounds.timerBeep(secs <= 2);
     }
 
     if (remaining === 0) clearInterval(timerIv);
@@ -783,21 +804,6 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ── Effects ───────────────────────────────────────────────────────────────────
-function playBuzz() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.setValueAtTime(440, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.1);
-    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.3);
-  } catch (e) { /* audio not available */ }
-}
 
 function spawnConfetti() {
   for (let i = 0; i < 10; i++) {

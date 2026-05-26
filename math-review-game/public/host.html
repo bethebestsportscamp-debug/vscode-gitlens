@@ -399,17 +399,32 @@
 <div id="verdictOverlay" class="verdict"></div>
 
 <script src="/socket.io/socket.io.js"></script>
+<script src="sounds.js"></script>
 <script>
 const socket = io();
 socket.emit('host:join');
 
 let gameState = null;
 let timerInterval = null;
+let lastBeepSec = null;
+let prevPhase = null;
 const CONFETTI = ['🎉','⭐','✨','🌟','💫','🎊','🏆','🎯'];
+
+// Unlock audio on first interaction (browser requirement)
+document.addEventListener('click', () => getCtx(), { once: true });
 
 // ── State Rendering ──────────────────────────────────────────────────────────
 socket.on('state', (s) => {
+  const wasPhase = gameState?.phase;
   gameState = s;
+
+  // Phase-transition sounds
+  if (wasPhase !== s.phase) {
+    if (s.phase === 'steal')     Sounds.gooseHonk();
+    if (s.phase === 'game_over') setTimeout(() => Sounds.elephant(), 300);
+  }
+
+  prevPhase = wasPhase;
   render();
 });
 
@@ -420,19 +435,24 @@ socket.on('answer_update', ({ answer }) => {
 });
 
 socket.on('buzz', ({ teamId }) => {
+  Sounds.quack();
   buzzFlash(teamId);
 });
 
 socket.on('correct', ({ teamId, points }) => {
+  Sounds.fanfare();
+  Sounds.cheer();
   showVerdict('correct', `✓ CORRECT  +${points}`);
   spawnConfetti();
 });
 
 socket.on('wrong', ({ teamId }) => {
+  Sounds.sadTrombone();
   showVerdict('wrong', '✗ WRONG');
 });
 
 socket.on('no_steal', () => {
+  Sounds.deflate();
   showVerdict('steal', 'NO STEAL', 1500);
 });
 
@@ -536,6 +556,8 @@ function renderTimer() {
   const timerBar   = document.getElementById('timerBar');
   const stealTimer = document.getElementById('stealTimer');
 
+  lastBeepSec = null;
+
   function tick() {
     const remaining = Math.max(0, s.timerEnd - Date.now());
     const secs = Math.ceil(remaining / 1000);
@@ -548,6 +570,12 @@ function renderTimer() {
     timerBar.style.width = pct + '%';
     timerBar.style.background = `hsl(${hue}, 90%, 55%)`;
     timerLabel.style.color = `hsl(${hue}, 90%, 70%)`;
+
+    // Beep every second for last 5 seconds (urgent beep for last 2)
+    if (secs <= 5 && secs > 0 && secs !== lastBeepSec) {
+      lastBeepSec = secs;
+      Sounds.timerBeep(secs <= 2);
+    }
 
     if (remaining === 0) clearInterval(timerInterval);
   }
