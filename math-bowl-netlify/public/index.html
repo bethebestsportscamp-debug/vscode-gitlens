@@ -103,10 +103,17 @@
     .status {
       padding: 14px 18px;
       border-radius: var(--radius);
-      background: rgba(255, 23, 68, .1);
-      border: 1px solid rgba(255, 23, 68, .35);
-      color: #ff8aa0;
+      background: rgba(0, 230, 118, .1);
+      border: 1px solid rgba(0, 230, 118, .35);
+      color: var(--correct);
       font-weight: 700;
+      letter-spacing: .5px;
+    }
+
+    .status::before {
+      content: '●';
+      margin-right: 8px;
+      animation: pulse 1.6s ease-in-out infinite;
     }
 
     @media (max-width: 620px) {
@@ -136,7 +143,7 @@
       </a>
     </section>
 
-    <div class="status">Firebase still needs to be configured before live buzz-in play.</div>
+    <div class="status">Live and ready — buzz-in synced via Firebase.</div>
   </main>
 </body>
 </html>
