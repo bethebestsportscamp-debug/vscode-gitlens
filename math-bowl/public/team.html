@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math Review Game – Team</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; min-height: 100vh; user-select: none; }
+
+    /* ── Setup Screen ─────────────────────────────────────────────────────── */
+    #setupScreen {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: radial-gradient(ellipse at 50% 0%, #1a0f4a 0%, var(--bg) 70%);
+    }
+    .setup-box {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .setup-box h1 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--gold);
+    }
+    .setup-box h2 {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: -16px;
+    }
+
+    .setup-section { display: flex; flex-direction: column; gap: 10px; }
+    .setup-label   { font-size: .8rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+
+    .name-input {
+      background: rgba(255,255,255,.07);
+      border: 2px solid var(--card-border);
+      border-radius: 12px;
+      color: var(--text);
+      padding: 14px 18px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      font-family: inherit;
+      width: 100%;
+      transition: border-color .2s;
+    }
+    .name-input:focus { outline: none; border-color: #7c4dff; }
+
+    /* ── Avatar Grid ─────────────────────────────────────────────────────── */
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+    .avatar-opt {
+      font-size: 1.8rem;
+      text-align: center;
+      padding: 8px 4px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color .15s, transform .15s;
+      background: rgba(255,255,255,.05);
+    }
+    .avatar-opt:hover  { transform: scale(1.15); background: rgba(255,255,255,.1); }
+    .avatar-opt.picked { border-color: var(--gold); background: rgba(255,215,0,.15); }
+
+    /* ── Color Grid ──────────────────────────────────────────────────────── */
+    .color-grid {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .color-opt {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: border-color .15s, transform .15s;
+    }
+    .color-opt:hover  { transform: scale(1.1); }
+    .color-opt.picked { border-color: #fff; transform: scale(1.15); }
+
+    /* ── Game Screen ──────────────────────────────────────────────────────── */
+    #gameScreen {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+    }
+
+    /* ── Team Header ─────────────────────────────────────────────────────── */
+    .team-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 24px;
+      background: rgba(0,0,0,.4);
+      border-bottom: 1px solid var(--card-border);
+      flex-shrink: 0;
+    }
+    .team-header .big-avatar { font-size: 2rem; }
+    .team-header .tname { font-size: 1.3rem; font-weight: 800; }
+    .team-header .score-pill {
+      margin-left: auto;
+      background: rgba(255,215,0,.15);
+      border: 2px solid var(--gold);
+      border-radius: 30px;
+      padding: 6px 16px;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--gold);
+    }
+    .team-header .pts-flash {
+      position: absolute;
+      right: 24px;
+      top: -20px;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--correct);
+      animation: rise 1.2s ease-out forwards;
+    }
+
+    /* ── Question Area ───────────────────────────────────────────────────── */
+    .q-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 28px 24px 20px;
+      gap: 24px;
+    }
+    .q-display {
+      width: 100%;
+      max-width: 700px;
+      padding: 28px 32px;
+      text-align: center;
+    }
+    .q-display p {
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 700;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .q-label { font-size: .75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .q-unit  { font-size: .8rem;  font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+
+    /* ── Buzz Button ─────────────────────────────────────────────────────── */
+    .buzz-zone {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .buzz-btn {
+      width: 100%;
+      height: 120px;
+      border: none;
+      border-radius: 20px;
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: transform .08s, box-shadow .08s;
+      text-transform: uppercase;
+    }
+    .buzz-btn:not(:disabled):hover { transform: translateY(-3px); }
+    .buzz-btn:not(:disabled):active { transform: scale(.97); }
+    .buzz-btn:disabled { opacity: .35; cursor: not-allowed; }
+    .buzz-hint { color: var(--muted); font-size: .9rem; }
+
+    /* ── Answer Input ─────────────────────────────────────────────────────── */
+    .answer-zone {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .answer-label {
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--muted);
+    }
+    .answer-input {
+      background: rgba(255,255,255,.08);
+      border: 3px solid var(--buzz);
+      border-radius: 14px;
+      color: var(--text);
+      padding: 18px 22px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      font-family: inherit;
+      width: 100%;
+      text-align: center;
+      transition: border-color .2s;
+    }
+    .answer-input:focus { outline: none; border-color: var(--gold); }
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      font-size: 1.3rem;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      font-weight: 900;
+      font-family: inherit;
+      transition: transform .1s;
+    }
+    .submit-btn:active { transform: scale(.97); }
+
+    /* ── Timer ───────────────────────────────────────────────────────────── */
+    .my-timer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      max-width: 600px;
+    }
+    .my-timer-num {
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    /* ── Status Messages ─────────────────────────────────────────────────── */
+    .status-msg {
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 18px 24px;
+      border-radius: var(--radius);
+      max-width: 600px;
+      width: 100%;
+    }
+    .status-buzzing {
+      background: rgba(124,77,255,.2);
+      border: 2px solid var(--buzz);
+      color: #c4aaff;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    .status-steal {
+      background: rgba(255,145,0,.15);
+      border: 2px solid var(--steal);
+      color: var(--steal);
+    }
+    .status-wait {
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    /* ── Scoreboard strip ────────────────────────────────────────────────── */
+    .score-strip {
+      display: flex;
+      gap: 8px;
+      padding: 10px 20px;
+      background: rgba(0,0,0,.3);
+      border-top: 1px solid var(--card-border);
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+    .score-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1.5px solid var(--card-border);
+      font-size: .85rem;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .score-chip.my-team { border-width: 2px; }
+
+    /* ── Waiting for game ────────────────────────────────────────────────── */
+    .waiting-lobby {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 40px;
+      text-align: center;
+    }
+    .waiting-lobby .big-avatar { font-size: 4rem; }
+    .waiting-lobby h2 { font-size: 1.5rem; font-weight: 800; }
+    .waiting-lobby p { color: var(--muted); animation: pulse 2s ease-in-out infinite; }
+
+    /* ── Game Over ───────────────────────────────────────────────────────── */
+    .gameover-view {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 32px;
+      text-align: center;
+    }
+    .gameover-view h2 { font-size: 2.5rem; font-weight: 900; color: var(--gold); }
+    .place-display   { font-size: 4rem; }
+    .final-list { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 400px; }
+    .final-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 16px; border-radius: 10px;
+      background: var(--card); border: 1px solid var(--card-border);
+      font-size: 1rem; font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     SETUP SCREEN
+═══════════════════════════════════════════════════════════════════════════ -->
+<div id="setupScreen">
+  <div class="setup-box">
+    <h1>⚡ Math Bowl</h1>
+    <h2>Set up your team before joining</h2>
+
+    <div class="card" style="padding:24px;display:flex;flex-direction:column;gap:22px">
+
+      <!-- Team Name -->
+      <div class="setup-section">
+        <div class="setup-label">Team Name</div>
+        <input id="nameInput" class="name-input" type="text" placeholder="Enter your team name…" maxlength="24" />
+      </div>
+
+      <!-- Avatar -->
+      <div class="setup-section">
+        <div class="setup-label">Team Character</div>
+        <div class="avatar-grid" id="avatarGrid"></div>
+      </div>
+
+      <!-- Color -->
+      <div class="setup-section">
+        <div class="setup-label">Team Color</div>
+        <div class="color-grid" id="colorGrid"></div>
+      </div>
+
+      <!-- Preview -->
+      <div id="teamPreview" style="text-align:center;padding:12px;border-radius:10px;background:rgba(255,255,255,.05)">
+        <span id="previewBadge" style="font-size:1.3rem;font-weight:800">Pick a name, character, and color!</span>
+      </div>
+
+      <button id="joinBtn" class="btn btn-gold btn-big" onclick="joinGame()" style="width:100%">
+        ⚡ Join Game!
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     GAME SCREEN
+═══════════════════════════════════════════════════════════════════════════ -->
+<div id="gameScreen">
+
+  <!-- Team Header -->
+  <div class="team-header" id="teamHeader">
+    <span class="big-avatar" id="hAvatar">🦁</span>
+    <span class="tname" id="hName" style="color:#fff">Team</span>
+    <div style="position:relative">
+      <div class="score-pill"><span id="hScore">0</span> pts</div>
+    </div>
+  </div>
+
+  <!-- Dynamic content -->
+  <div id="gameContent" style="flex:1;display:flex;flex-direction:column;overflow-y:auto"></div>
+
+  <!-- Score Strip -->
+  <div id="scoreStrip" class="score-strip"></div>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="sounds.js"></script>
+<script>
+// ── Config ────────────────────────────────────────────────────────────────────
+const AVATARS = ['🦁','🐯','🦊','🐻','🐼','🐸','🐙','🦉','🐉','🦄','🤖','🦅','🐬','🦋','🐺'];
+const COLORS = [
+  { name: 'Electric Blue',  hex: '#2196f3' },
+  { name: 'Fire Red',       hex: '#f44336' },
+  { name: 'Neon Green',     hex: '#00e676' },
+  { name: 'Royal Purple',   hex: '#9c27b0' },
+  { name: 'Sunset Orange',  hex: '#ff6d00' },
+  { name: 'Hot Pink',       hex: '#e91e63' },
+  { name: 'Teal',           hex: '#00bcd4' },
+  { name: 'Gold',           hex: '#ffc107' },
+];
+const CONFETTI = ['🎉','⭐','✨','🌟','💫','🎊','🏆','🎯'];
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let myTeamId    = localStorage.getItem('mathGameTeamId') || null;
+let myAvatar    = AVATARS[0];
+let myColor     = COLORS[0].hex;
+let gameState   = null;
+let timerIv     = null;
+let hasJoined   = false;
+let lastTeamBeepSec = null;
+
+// Unlock audio on first tap/click (browser requirement)
+document.addEventListener('click', () => getCtx(), { once: true });
+
+// ── Socket ────────────────────────────────────────────────────────────────────
+const socket = io();
+
+socket.on('connect', () => {
+  if (myTeamId) {
+    // Re-register on reconnect
+    const saved = JSON.parse(localStorage.getItem('mathGameTeam') || '{}');
+    if (saved.name) {
+      socket.emit('team:register', {
+        teamId: myTeamId,
+        name:   saved.name,
+        avatar: saved.avatar,
+        color:  saved.color,
+      });
+    }
+  }
+});
+
+socket.on('state', (s) => {
+  gameState = s;
+  if (hasJoined || myTeamId) render();
+});
+
+socket.on('buzz', ({ teamId }) => {
+  if (teamId === myTeamId) {
+    Sounds.quack();
+    document.getElementById('gameContent').classList.add('anim-flash');
+    setTimeout(() => document.getElementById('gameContent').classList.remove('anim-flash'), 1500);
+  }
+});
+
+socket.on('correct', ({ teamId, points }) => {
+  if (teamId === myTeamId) {
+    Sounds.fanfare();
+    Sounds.cheer();
+    spawnConfetti();
+  }
+});
+
+socket.on('wrong', ({ teamId }) => {
+  if (teamId === myTeamId) {
+    Sounds.sadTrombone();
+    document.getElementById('gameContent').classList.add('anim-shake');
+    setTimeout(() => document.getElementById('gameContent').classList.remove('anim-shake'), 600);
+  }
+});
+
+socket.on('no_steal', () => {
+  if (gameState && gameState.buzzedTeams.includes(myTeamId)) {
+    Sounds.deflate();
+  }
+});
+
+// ── Setup Screen ──────────────────────────────────────────────────────────────
+function buildSetupUI() {
+  // Avatars
+  const ag = document.getElementById('avatarGrid');
+  AVATARS.forEach((a, i) => {
+    const el = document.createElement('div');
+    el.className = 'avatar-opt' + (i === 0 ? ' picked' : '');
+    el.textContent = a;
+    el.onclick = () => {
+      document.querySelectorAll('.avatar-opt').forEach(x => x.classList.remove('picked'));
+      el.classList.add('picked');
+      myAvatar = a;
+      updatePreview();
+    };
+    ag.appendChild(el);
+  });
+
+  // Colors
+  const cg = document.getElementById('colorGrid');
+  COLORS.forEach((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'color-opt' + (i === 0 ? ' picked' : '');
+    el.style.background = c.hex;
+    el.title = c.name;
+    el.onclick = () => {
+      document.querySelectorAll('.color-opt').forEach(x => x.classList.remove('picked'));
+      el.classList.add('picked');
+      myColor = c.hex;
+      updatePreview();
+    };
+    cg.appendChild(el);
+  });
+
+  document.getElementById('nameInput').addEventListener('input', updatePreview);
+  updatePreview();
+}
+
+function updatePreview() {
+  const name = document.getElementById('nameInput').value.trim() || 'Your Team';
+  const preview = document.getElementById('previewBadge');
+  preview.innerHTML = `
+    <span style="font-size:1.8rem">${myAvatar}</span>
+    <span style="color:${myColor};font-size:1.2rem;font-weight:800;margin-left:8px">${esc(name)}</span>
+  `;
+}
+
+function joinGame() {
+  const name = document.getElementById('nameInput').value.trim();
+  if (!name) {
+    document.getElementById('nameInput').focus();
+    document.getElementById('nameInput').style.borderColor = 'var(--wrong)';
+    setTimeout(() => document.getElementById('nameInput').style.borderColor = '', 1500);
+    return;
+  }
+
+  if (!myTeamId) {
+    myTeamId = 'team_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('mathGameTeamId', myTeamId);
+  }
+
+  const teamData = { teamId: myTeamId, name, avatar: myAvatar, color: myColor };
+  localStorage.setItem('mathGameTeam', JSON.stringify(teamData));
+
+  socket.emit('team:register', teamData);
+  hasJoined = true;
+
+  document.getElementById('setupScreen').style.display = 'none';
+  document.getElementById('gameScreen').style.display  = 'flex';
+
+  document.getElementById('hAvatar').textContent = myAvatar;
+  document.getElementById('hName').textContent   = name;
+  document.getElementById('hName').style.color   = myColor;
+
+  if (gameState) render();
+}
+
+// ── Game Rendering ────────────────────────────────────────────────────────────
+function render() {
+  if (!gameState || !myTeamId) return;
+  const s = gameState;
+  const me = s.teams[myTeamId];
+
+  if (me) {
+    document.getElementById('hScore').textContent  = me.score;
+    document.getElementById('hAvatar').textContent = me.avatar || myAvatar;
+    document.getElementById('hName').textContent   = me.name;
+    document.getElementById('hName').style.color   = me.color || myColor;
+  }
+
+  renderScoreStrip();
+
+  const content = document.getElementById('gameContent');
+
+  if (s.phase === 'lobby') {
+    content.innerHTML = buildLobbyHTML();
+    return;
+  }
+
+  if (s.phase === 'game_over') {
+    content.innerHTML = buildGameOverHTML();
+    spawnConfetti();
+    return;
+  }
+
+  // Question phases
+  content.innerHTML = buildQuestionHTML();
+  setupQuestionListeners();
+  renderMyTimer();
+}
+
+function buildLobbyHTML() {
+  return `
+    <div class="waiting-lobby">
+      <div class="big-avatar">${myAvatar}</div>
+      <h2 style="color:${myColor}">You're in!</h2>
+      <p>Waiting for the teacher to start the game…</p>
+    </div>
+  `;
+}
+
+function buildGameOverHTML() {
+  const s = gameState;
+  const teams = Object.values(s.teams).sort((a,b) => b.score - a.score);
+  const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
+  const myPlace = teams.findIndex(t => t.id === myTeamId);
+  return `
+    <div class="gameover-view">
+      <h2>🏆 Game Over! 🏆</h2>
+      <div class="place-display">${medals[myPlace] || (myPlace + 1)}</div>
+      <div style="font-size:1.2rem;font-weight:700;color:${myColor}">
+        ${s.teams[myTeamId]?.name || 'You'} — ${s.teams[myTeamId]?.score || 0} pts
+      </div>
+      <div class="final-list">
+        ${teams.map((t, i) => `
+          <div class="final-item" style="border-color:${t.id === myTeamId ? t.color : 'var(--card-border)'}">
+            <span>${medals[i] || (i+1)}</span>
+            <span>${t.avatar}</span>
+            <span style="flex:1;color:${t.color}">${esc(t.name)}</span>
+            <span style="color:var(--gold)">${t.score} pts</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function buildQuestionHTML() {
+  const s = gameState;
+  if (!s.currentQ) return '';
+
+  const isMyTurn = s.activeBuzzTeam === myTeamId;
+  const hasAlreadyBuzzed = s.buzzedTeams.includes(myTeamId);
+  const someoneElseBuzzed = s.activeBuzzTeam && s.activeBuzzTeam !== myTeamId;
+
+  let actionHTML = '';
+
+  if (s.phase === 'question') {
+    // Waiting to buzz
+    const canBuzz = !hasAlreadyBuzzed;
+    actionHTML = `
+      <div class="buzz-zone">
+        <button class="buzz-btn" id="buzzBtn" ${canBuzz ? '' : 'disabled'}
+          style="background:${canBuzz ? myColor : '#333'};color:${canBuzz ? '#000' : '#666'}">
+          ${canBuzz ? '🔔 BUZZ IN!' : '⏳ Already Buzzed'}
+        </button>
+        <div class="buzz-hint">Press <strong>SPACEBAR</strong> or tap the button!</div>
+      </div>
+    `;
+  } else if (s.phase === 'answering' && isMyTurn) {
+    // It's our turn!
+    actionHTML = `
+      <div class="my-timer">
+        <div class="my-timer-num" id="myTimerNum" style="color:${myColor}">30</div>
+        <div class="timer-wrap" style="max-width:400px;width:100%"><div id="myTimerBar" class="timer-bar"></div></div>
+      </div>
+      <div class="answer-zone">
+        <div class="answer-label">✏️ Type your answer below — it shows on the board!</div>
+        <input id="answerInput" class="answer-input" type="text"
+          placeholder="Your answer…" maxlength="200" autocomplete="off"
+          style="border-color:${myColor}" />
+        <button class="submit-btn" id="submitBtn"
+          style="background:${myColor};color:#000">
+          Submit Answer ↵
+        </button>
+      </div>
+    `;
+  } else if (s.phase === 'answering' && someoneElseBuzzed) {
+    const buzzer = s.teams[s.activeBuzzTeam];
+    actionHTML = `
+      <div class="status-msg status-buzzing" style="border-color:${buzzer?.color || 'var(--buzz)'}">
+        ${buzzer?.avatar || '?'} ${esc(buzzer?.name || 'Another team')} is answering…
+      </div>
+      <div class="status-msg status-wait">Stay ready — if they're wrong, buzz in to steal!</div>
+    `;
+  } else if (s.phase === 'judging') {
+    const judger = s.teams[s.activeBuzzTeam];
+    actionHTML = `
+      <div class="status-msg" style="background:rgba(255,255,255,.07);border:1px solid var(--card-border)">
+        ${isMyTurn ? '⏳ Waiting for the teacher to judge…' : `⏳ ${esc(judger?.name || 'Team')} submitted — waiting for judge…`}
+      </div>
+    `;
+  } else if (s.phase === 'steal') {
+    const canSteal = !hasAlreadyBuzzed && s.activeBuzzTeam !== myTeamId;
+    actionHTML = `
+      <div class="status-msg status-steal">
+        🔥 STEAL OPPORTUNITY! ${canSteal ? 'Buzz in fast!' : 'You already used your buzz.'}
+      </div>
+      ${canSteal ? `
+        <div class="buzz-zone">
+          <button class="buzz-btn" id="buzzBtn"
+            style="background:var(--steal);color:#000">
+            🔥 STEAL IT!
+          </button>
+          <div class="buzz-hint">Press <strong>SPACEBAR</strong> to steal!</div>
+        </div>
+      ` : ''}
+    `;
+  }
+
+  return `
+    <div class="q-area">
+      <div class="card q-display">
+        <div class="q-label">Question ${s.qIndex + 1} of ${s.questions.length} · ${s.currentQ.points} pts</div>
+        ${s.currentQ.unit ? `<div class="q-unit">${esc(s.currentQ.unit)}</div>` : ''}
+        <p>${esc(s.currentQ.text)}</p>
+      </div>
+      ${actionHTML}
+    </div>
+  `;
+}
+
+function setupQuestionListeners() {
+  const buzzBtn  = document.getElementById('buzzBtn');
+  const ansInput = document.getElementById('answerInput');
+  const subBtn   = document.getElementById('submitBtn');
+
+  if (buzzBtn) {
+    buzzBtn.onclick = () => doBuzz();
+  }
+
+  if (ansInput) {
+    ansInput.focus();
+    ansInput.addEventListener('input', () => {
+      socket.emit('team:type', ansInput.value);
+    });
+    ansInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') doSubmit();
+    });
+  }
+
+  if (subBtn) {
+    subBtn.onclick = () => doSubmit();
+  }
+}
+
+function renderMyTimer() {
+  clearInterval(timerIv);
+  const s = gameState;
+  if (!s.timerEnd) return;
+  if (!['answering','steal'].includes(s.phase)) return;
+
+  const isMyTurn = s.activeBuzzTeam === myTeamId;
+  const totalMs = s.phase === 'steal' ? 10000 : 30000;
+  const numEl = document.getElementById('myTimerNum');
+  const barEl = document.getElementById('myTimerBar');
+
+  lastTeamBeepSec = null;
+
+  function tick() {
+    const remaining = Math.max(0, s.timerEnd - Date.now());
+    const secs = Math.ceil(remaining / 1000);
+    const pct  = (remaining / totalMs) * 100;
+
+    if (numEl) numEl.textContent = secs;
+    if (barEl) {
+      barEl.style.width = pct + '%';
+      const hue = pct * 1.2;
+      barEl.style.background = `hsl(${hue}, 90%, 55%)`;
+      if (numEl) numEl.style.color = `hsl(${hue}, 90%, 65%)`;
+    }
+
+    // Beep only when it's this team's turn to answer
+    if (isMyTurn && secs <= 5 && secs > 0 && secs !== lastTeamBeepSec) {
+      lastTeamBeepSec = secs;
+      Sounds.timerBeep(secs <= 2);
+    }
+
+    if (remaining === 0) clearInterval(timerIv);
+  }
+  tick();
+  timerIv = setInterval(tick, 200);
+}
+
+function renderScoreStrip() {
+  const s = gameState;
+  const teams = Object.values(s.teams).sort((a,b) => b.score - a.score);
+  const el = document.getElementById('scoreStrip');
+  el.innerHTML = teams.map(t => `
+    <div class="score-chip ${t.id === myTeamId ? 'my-team' : ''}"
+      style="border-color:${t.color};${t.id === myTeamId ? 'background:rgba(255,255,255,.1)' : ''}">
+      ${t.avatar} <span style="color:${t.color}">${esc(t.name)}</span>
+      <span style="color:var(--gold);margin-left:4px">${t.score}</span>
+    </div>
+  `).join('');
+}
+
+// ── Actions ────────────────────────────────────────────────────────────────────
+function doBuzz() {
+  socket.emit('team:buzz');
+}
+
+function doSubmit() {
+  socket.emit('team:submit');
+}
+
+// ── Spacebar ─────────────────────────────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+  if (!hasJoined || !gameState) return;
+  if (e.code === 'Space') {
+    // Don't buzz if typing in answer input
+    if (document.activeElement?.id === 'answerInput') return;
+    const phase = gameState.phase;
+    if (phase === 'question') {
+      e.preventDefault();
+      doBuzz();
+    } else if (phase === 'steal' && gameState.activeBuzzTeam !== myTeamId && !gameState.buzzedTeams.includes(myTeamId)) {
+      e.preventDefault();
+      doBuzz();
+    }
+  }
+});
+
+// ── Effects ───────────────────────────────────────────────────────────────────
+
+function spawnConfetti() {
+  for (let i = 0; i < 10; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.textContent = CONFETTI[Math.floor(Math.random() * CONFETTI.length)];
+      el.style.left  = Math.random() * 100 + 'vw';
+      el.style.bottom = '60px';
+      el.style.animationDuration = (.8 + Math.random() * .7) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 2000);
+    }, i * 80);
+  }
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+buildSetupUI();
+
+// If team was previously registered, offer to rejoin
+const savedTeam = JSON.parse(localStorage.getItem('mathGameTeam') || '{}');
+if (savedTeam.name && myTeamId) {
+  document.getElementById('nameInput').value   = savedTeam.name;
+  const savedAvatarIdx = AVATARS.indexOf(savedTeam.avatar);
+  if (savedAvatarIdx >= 0) {
+    document.querySelectorAll('.avatar-opt')[savedAvatarIdx]?.click();
+  }
+  const savedColorIdx = COLORS.findIndex(c => c.hex === savedTeam.color);
+  if (savedColorIdx >= 0) {
+    document.querySelectorAll('.color-opt')[savedColorIdx]?.click();
+  }
+  updatePreview();
+}
+</script>
+</body>
+</html>
