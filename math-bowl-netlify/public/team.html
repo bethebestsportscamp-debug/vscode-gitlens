@@ -158,6 +158,7 @@ let timerIv   = null;
 let hasJoined = false;
 let lastTeamBeepSec = null;
 let lastTeamTimerEnd = 0;
+let lastLocalBuzzSoundAt = 0;
 let lastBuzzTs = 0;
 let lastVerdictTs = 0;
 
@@ -186,9 +187,8 @@ function handleBuzzSound() {
   if (!gameState) return;
   const ts = gameState.lastBuzzTs || 0;
   if (ts > lastBuzzTs && lastBuzzTs > 0 && gameState.activeBuzzTeam === myTeamId) {
-    Sounds.animalBuzz();
-    document.getElementById('gameContent')?.classList.add('anim-flash');
-    setTimeout(() => document.getElementById('gameContent')?.classList.remove('anim-flash'), 1500);
+    if (Date.now() - lastLocalBuzzSoundAt > 1800) Sounds.animalBuzz();
+    flashBuzzFeedback();
   }
   lastBuzzTs = ts;
 }
@@ -290,6 +290,15 @@ window.joinGame = async () => {
 // ── Actions ──────────────────────────────────────────────────────────────────
 async function doBuzz() {
   if (!myTeamId) return;
+  const canBuzz =
+    (gameState?.phase === 'question' && !(gameState.buzzedTeams || {})[myTeamId]) ||
+    (gameState?.phase === 'steal' && gameState.activeBuzzTeam !== myTeamId && !(gameState.buzzedTeams || {})[myTeamId]);
+  if (!canBuzz) return;
+
+  Sounds.animalBuzz();
+  lastLocalBuzzSoundAt = Date.now();
+  flashBuzzFeedback();
+
   // Atomic: only one team can win the buzz
   await runTransaction(stateRef, (s) => {
     if (!s) return;
@@ -314,6 +323,11 @@ async function doBuzz() {
     }
     return s;
   });
+}
+
+function flashBuzzFeedback() {
+  document.getElementById('gameContent')?.classList.add('anim-flash');
+  setTimeout(() => document.getElementById('gameContent')?.classList.remove('anim-flash'), 1500);
 }
 
 let typeDebounce = null;
