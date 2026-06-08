@@ -294,6 +294,7 @@ async function doBuzz() {
     (gameState?.phase === 'question' && !(gameState.buzzedTeams || {})[myTeamId]) ||
     (gameState?.phase === 'steal' && gameState.activeBuzzTeam !== myTeamId && !(gameState.buzzedTeams || {})[myTeamId]);
   if (!canBuzz) return;
+  if (Date.now() - lastLocalBuzzSoundAt < 900) return;
 
   Sounds.animalBuzz();
   lastLocalBuzzSoundAt = Date.now();
@@ -537,6 +538,7 @@ function renderScoreStrip() {
 document.addEventListener('keydown', (e) => {
   if (!hasJoined || !gameState) return;
   if (e.code === 'Space') {
+    if (e.repeat) return;
     if (document.activeElement?.id === 'answerInput') return;
     const phase = gameState.phase;
     if (phase === 'question' && !(gameState.buzzedTeams || {})[myTeamId]) {
