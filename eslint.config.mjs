@@ -51,7 +51,7 @@ const filePatterns = {
 
 /** Ignore patterns for different contexts */
 const ignorePatterns = {
-	default: ['*.*', 'patches', 'scripts', 'src/@types'],
+	default: ['*.*', 'patches', 'scripts', 'src/@types', 'math-bowl/**', 'math-bowl-netlify/**'],
 	extensionOnly: ['**/-webview/**/*'],
 	webviewOnly: ['src/**/webview/**/*', 'src/webviews/apps/**/*'],
 	nodeOnly: ['src/env/node/**/*'],
