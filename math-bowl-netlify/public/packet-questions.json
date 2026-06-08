@@ -1,637 +1,593 @@
 [
-  {
-    "id": "FR2026-010",
-    "text": "Evaluate 2x² + 3y when x = 4 and y = 6.",
-    "answer": "50",
-    "points": 150,
-    "unit": "Unit 1: Evaluating Expressions"
-  },
-  {
-    "id": "FR2026-050",
-    "text": "What is the solution to the system shown on the graph?",
-    "answer": "(-3, 1)",
-    "points": 200,
-    "unit": "Unit 5: Systems",
-    "images": [
-      "question-assets/final-review-2026/image26.png"
-    ]
-  },
-  {
-    "id": "FR2026-012",
-    "text": "Solve.\n5x − 8 = 32",
-    "answer": "8",
-    "points": 100,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-031",
-    "text": "A movie ticket is $16 and you have at most $50.\nWhich inequality represents how many tickets t you can buy?",
-    "answer": "16t ≤ 50",
-    "points": 150,
-    "unit": "Unit 3: Inequality Word Problems"
-  },
-  {
-    "id": "FR2026-035",
-    "text": "Write the inequality.\nFive times a number is less than 20.",
-    "answer": "5x < 20",
-    "points": 100,
-    "unit": "Unit 3: Inequality Word Problems"
-  },
-  {
-    "id": "FR2026-047",
-    "text": "Find the slope from the table.",
-    "answer": "0",
-    "points": 150,
-    "unit": "Unit 4: Slope",
-    "images": [
-      "question-assets/final-review-2026/image22.png"
-    ]
-  },
-  {
-    "id": "FR2026-023",
-    "text": "Solve.\n6(x + 1) − 8 = 22",
-    "answer": "4",
-    "points": 150,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-030",
-    "text": "Solve the compound inequality.\n−2 < x − 2 ≤ 5",
-    "answer": "0 < x ≤ 7",
-    "points": 200,
-    "unit": "Unit 3: Compound Inequalities"
-  },
-  {
-    "id": "FR2026-076",
-    "text": "Factor completely.\n3x² + 15x + 18",
-    "answer": "3(x + 2)(x + 3)",
-    "points": 200,
-    "unit": "Unit 8: Factoring"
-  },
-  {
-    "id": "FR2026-075",
-    "text": "Factor completely.\nx⁴ − 16",
-    "answer": "(x - 2)(x + 2)(x² + 4)",
-    "points": 200,
-    "unit": "Unit 8: Factoring"
-  },
-  {
-    "id": "FR2026-004",
-    "text": "Simplify.\n2(3x + 4)",
-    "answer": "6x + 8",
-    "points": 100,
-    "unit": "Unit 1: Distributive Property"
-  },
-  {
-    "id": "FR2026-071",
-    "text": "Simplify.\n(2x + 5)(x − 4) + 3x − 9",
-    "answer": "2x² - 29",
-    "points": 200,
-    "unit": "Unit 7: Polynomials"
-  },
-  {
-    "id": "FR2026-061",
-    "text": "What type of function is shown by the graph?",
-    "answer": "Quadratic",
-    "points": 150,
-    "unit": "Unit 6: Function Types",
-    "images": [
-      "question-assets/final-review-2026/image33.png"
-    ]
-  },
-  {
-    "id": "FR2026-022",
-    "text": "Solve.\n5(x − 3) + 10 = 0",
-    "answer": "1",
-    "points": 150,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-078",
-    "text": "Use the packet factoring references to choose the best method first.\nWhich method fits x⁴ − 16?",
-    "answer": "DOTS first, then factor completely",
-    "points": 150,
-    "unit": "Unit 8: Factoring",
-    "images": [
-      "question-assets/final-review-2026/image44.png",
-      "question-assets/final-review-2026/image45.png",
-      "question-assets/final-review-2026/image46.png"
-    ]
-  },
-  {
-    "id": "FR2026-033",
-    "text": "Solve and graph the solution.\n−6x − 4 > 2x − 20",
-    "answer": "x < 2; open circle at 2, shaded left",
-    "points": 200,
-    "unit": "Unit 3: Inequality Graphs",
-    "images": [
-      "question-assets/final-review-2026/image11.png"
-    ]
-  },
-  {
-    "id": "FR2026-027",
-    "text": "Solve.\n2(3x + 4) = 4x + 20",
-    "answer": "6",
-    "points": 200,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-077",
-    "text": "Factor completely.\n−5x² + 5x + 100",
-    "answer": "-5(x - 5)(x + 4)",
-    "points": 200,
-    "unit": "Unit 8: Factoring"
-  },
-  {
-    "id": "FR2026-011",
-    "text": "Evaluate each expression when a = −2 and b = 5.\n1. a² − b\n2. b − a\n3. 2a + 3b\n4. ab − 6a",
-    "answer": "1. -1; 2. 7; 3. 11; 4. 2",
-    "points": 200,
-    "unit": "Unit 1: Evaluating Expressions"
-  },
-  {
-    "id": "FR2026-028",
-    "text": "Solve.\n−3x < 18",
-    "answer": "x > -6",
-    "points": 150,
-    "unit": "Unit 3: Inequalities"
-  },
-  {
-    "id": "FR2026-040",
-    "text": "Find the slope from the table.",
-    "answer": "2",
-    "points": 150,
-    "unit": "Unit 4: Slope",
-    "images": [
-      "question-assets/final-review-2026/image17.png"
-    ]
-  },
-  {
-    "id": "FR2026-051",
-    "text": "Solve the system.\ny = 4x + 1\ny = 2x + 5",
-    "answer": "(2, 9)",
-    "points": 200,
-    "unit": "Unit 5: Systems"
-  },
-  {
-    "id": "FR2026-057",
-    "text": "Solve the system.\n8y = 72\n8x + 2y = 10",
-    "answer": "(-1, 9)",
-    "points": 200,
-    "unit": "Unit 5: Systems"
-  },
-  {
-    "id": "FR2026-049",
-    "text": "Find the slope of the graphed line.",
-    "answer": "1",
-    "points": 200,
-    "unit": "Unit 4: Slope",
-    "images": [
-      "question-assets/final-review-2026/image24.jpeg"
-    ]
-  },
-  {
-    "id": "FR2026-058",
-    "text": "Which graph is NOT a function?",
-    "answer": "The circle graph is not a function",
-    "points": 200,
-    "unit": "Unit 6: Functions",
-    "images": [
-      "question-assets/final-review-2026/image27.png",
-      "question-assets/final-review-2026/image28.png",
-      "question-assets/final-review-2026/image29.png",
-      "question-assets/final-review-2026/image30.png"
-    ]
-  },
-  {
-    "id": "FR2026-066",
-    "text": "For each relation shown, decide whether it is a function.",
-    "answer": "Functions: line, absolute value, upward parabola. Not functions: circle, sideways parabola, sideways V graph.",
-    "points": 200,
-    "unit": "Unit 6: Functions",
-    "images": [
-      "question-assets/final-review-2026/image38.png"
-    ]
-  },
-  {
-    "id": "FR2026-032",
-    "text": "Solve and graph the solution.\n3(x − 5) ≤ 15",
-    "answer": "x ≤ 10; closed circle at 10, shaded left",
-    "points": 200,
-    "unit": "Unit 3: Inequality Graphs",
-    "images": [
-      "question-assets/final-review-2026/image11.png"
-    ]
-  },
-  {
-    "id": "FR2026-044",
-    "text": "Find the slope of the line through (4, 3) and (8, 6).",
-    "answer": "3/4",
-    "points": 150,
-    "unit": "Unit 4: Slope"
-  },
-  {
-    "id": "FR2026-036",
-    "text": "Write the inequality.\nA number decreased by 7 is no more than 12.",
-    "answer": "x - 7 ≤ 12",
-    "points": 100,
-    "unit": "Unit 3: Inequality Word Problems"
-  },
-  {
-    "id": "FR2026-002",
-    "text": "Simplify.\n12 + 7 − 5 × 6 + 1",
-    "answer": "-10",
-    "points": 100,
-    "unit": "Unit 1: Order of Operations"
-  },
-  {
-    "id": "FR2026-054",
-    "text": "Solve the system.\n4x + 5y = 23\n9x − 5y = −62",
-    "answer": "(-3, 7)",
-    "points": 200,
-    "unit": "Unit 5: Systems"
-  },
-  {
-    "id": "FR2026-018",
-    "text": "Solve.\n4x + 9 = 25",
-    "answer": "4",
-    "points": 100,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-024",
-    "text": "Solve.\n2(x − 5) + 3x = 9",
-    "answer": "19/5",
-    "points": 200,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-026",
-    "text": "Solve.\n5x + 3 = 3x + 15",
-    "answer": "6",
-    "points": 150,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-063",
-    "text": "Is the mapping diagram a function? Explain briefly.",
-    "answer": "Function: each input has one output",
-    "points": 150,
-    "unit": "Unit 6: Functions",
-    "images": [
-      "question-assets/final-review-2026/image35.png"
-    ]
-  },
-  {
-    "id": "FR2026-009",
-    "text": "Simplify.\nx² + 9 − 8x + 3x² − 10",
-    "answer": "4x² - 8x - 1",
-    "points": 150,
-    "unit": "Unit 1: Like Terms"
-  },
-  {
-    "id": "FR2026-034",
-    "text": "Write the inequality.\nThree more than a number is at least 10.",
-    "answer": "x + 3 ≥ 10",
-    "points": 100,
-    "unit": "Unit 3: Inequality Word Problems"
-  },
-  {
-    "id": "FR2026-059",
-    "text": "Find the domain and range shown on the graph.",
-    "answer": "Teacher check: use the domain and range marked on the visual",
-    "points": 200,
-    "unit": "Unit 6: Domain and Range",
-    "images": [
-      "question-assets/final-review-2026/image31.png"
-    ]
-  },
-  {
-    "id": "FR2026-055",
-    "text": "Solve the system.\nx + 4y = 25\n3x − 6y = −33",
-    "answer": "(1, 6)",
-    "points": 200,
-    "unit": "Unit 5: Systems"
-  },
-  {
-    "id": "FR2026-039",
-    "text": "Find the slope of the line shown.",
-    "answer": "4/3",
-    "points": 150,
-    "unit": "Unit 4: Slope",
-    "images": [
-      "question-assets/final-review-2026/image16.png"
-    ]
-  },
-  {
-    "id": "FR2026-014",
-    "text": "Solve.\n9n − 6 = 5n + 18",
-    "answer": "6",
-    "points": 150,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-029",
-    "text": "Which graph represents x ≤ 3?",
-    "answer": "First graph: closed circle at 3, shaded left",
-    "points": 200,
-    "unit": "Unit 3: Inequality Graphs",
-    "images": [
-      "question-assets/final-review-2026/image7.png",
-      "question-assets/final-review-2026/image8.png",
-      "question-assets/final-review-2026/image9.png",
-      "question-assets/final-review-2026/image10.png"
-    ]
-  },
-  {
-    "id": "FR2026-068",
-    "text": "Simplify using exponent rules.\nx¹⁰ ÷ x¹⁰",
-    "answer": "1",
-    "points": 100,
-    "unit": "Unit 7: Exponent Rules"
-  },
-  {
-    "id": "FR2026-015",
-    "text": "Solve.\n6y − 3 = 27",
-    "answer": "5",
-    "points": 100,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-025",
-    "text": "Solve.\n4x − 6 = 2x + 10",
-    "answer": "8",
-    "points": 150,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-001",
-    "text": "What is the first step in simplifying this expression?\n8 + 16 ÷ 2 × 5\nA. 8 + 16\nB. 16 ÷ 2\nC. 8 × 5\nD. 2 × 5",
-    "answer": "B. 16 ÷ 2",
-    "points": 100,
-    "unit": "Unit 1: Order of Operations"
-  },
-  {
-    "id": "FR2026-060",
-    "text": "Which table represents a function?",
-    "answer": "Table (4)",
-    "points": 150,
-    "unit": "Unit 6: Functions",
-    "images": [
-      "question-assets/final-review-2026/image32.png"
-    ]
-  },
-  {
-    "id": "FR2026-005",
-    "text": "Simplify.\n−4(3x − 9)",
-    "answer": "-12x + 36",
-    "points": 150,
-    "unit": "Unit 1: Distributive Property"
-  },
-  {
-    "id": "FR2026-020",
-    "text": "Solve.\n3(x − 4) + 5 = 20",
-    "answer": "9",
-    "points": 150,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-037",
-    "text": "Solve and graph the compound inequality.\n2 < x + 3 ≤ 7",
-    "answer": "-1 < x ≤ 4; open at -1, closed at 4, shaded between",
-    "points": 200,
-    "unit": "Unit 3: Compound Inequalities",
-    "images": [
-      "question-assets/final-review-2026/image11.png"
-    ]
-  },
-  {
-    "id": "FR2026-016",
-    "text": "Solve.\n2x + 5 = 15",
-    "answer": "5",
-    "points": 100,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-003",
-    "text": "Simplify.\n7 + 2 + 2 + 24 × 5",
-    "answer": "131",
-    "points": 100,
-    "unit": "Unit 1: Order of Operations"
-  },
-  {
-    "id": "FR2026-041",
-    "text": "Graph the linear equation.\ny = 1/2x − 5",
-    "answer": "Accept graph with y-intercept -5 and slope 1/2",
-    "points": 200,
-    "unit": "Unit 4: Graphing Lines",
-    "images": [
-      "question-assets/final-review-2026/image18.png"
-    ]
-  },
-  {
-    "id": "FR2026-042",
-    "text": "Graph the linear equation.\ny = −2x + 3",
-    "answer": "Accept graph with y-intercept 3 and slope -2",
-    "points": 200,
-    "unit": "Unit 4: Graphing Lines",
-    "images": [
-      "question-assets/final-review-2026/image18.png"
-    ]
-  },
-  {
-    "id": "FR2026-007",
-    "text": "Which is NOT a like term of 3y?\nA. 13y\nB. −3y\nC. 4y²\nD. 2.5y",
-    "answer": "C. 4y²",
-    "points": 100,
-    "unit": "Unit 1: Like Terms"
-  },
-  {
-    "id": "FR2026-048",
-    "text": "Find the slope of the graphed line.",
-    "answer": "-2/3",
-    "points": 200,
-    "unit": "Unit 4: Slope",
-    "images": [
-      "question-assets/final-review-2026/image23.png"
-    ]
-  },
-  {
-    "id": "FR2026-065",
-    "text": "Is the table a function?",
-    "answer": "No, at least one input has more than one output",
-    "points": 150,
-    "unit": "Unit 6: Functions",
-    "images": [
-      "question-assets/final-review-2026/image37.png"
-    ]
-  },
-  {
-    "id": "FR2026-013",
-    "text": "Solve.\n4x + 3 − 2 = 6",
-    "answer": "5/4",
-    "points": 150,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-073",
-    "text": "Which expression is equivalent to x² + 7x + 12?",
-    "answer": "(x + 3)(x + 4)",
-    "points": 150,
-    "unit": "Unit 8: Factoring"
-  },
-  {
-    "id": "FR2026-053",
-    "text": "Solve the system.\n2x + 3y = 15\nx − 3y = 3",
-    "answer": "(6, 1)",
-    "points": 200,
-    "unit": "Unit 5: Systems"
-  },
-  {
-    "id": "FR2026-070",
-    "text": "Multiply.\n(x + 1)(x² + 2x + 3)",
-    "answer": "x³ + 3x² + 5x + 3",
-    "points": 200,
-    "unit": "Unit 7: Polynomials"
-  },
-  {
-    "id": "FR2026-043",
-    "text": "Graph the linear equation.\ny + 1 = 2x + 6",
-    "answer": "y = 2x + 5; accept graph with y-intercept 5 and slope 2",
-    "points": 200,
-    "unit": "Unit 4: Graphing Lines",
-    "images": [
-      "question-assets/final-review-2026/image18.png"
-    ]
-  },
-  {
-    "id": "FR2026-067",
-    "text": "What is the degree of this polynomial?\n3x³ + 2x² − 1",
-    "answer": "3",
-    "points": 100,
-    "unit": "Unit 7: Polynomials"
-  },
-  {
-    "id": "FR2026-064",
-    "text": "Is the table a function?",
-    "answer": "Yes, each input has exactly one output",
-    "points": 150,
-    "unit": "Unit 6: Functions",
-    "images": [
-      "question-assets/final-review-2026/image36.png"
-    ]
-  },
-  {
-    "id": "FR2026-038",
-    "text": "What type of slope does each graph show?\nGive answers in the order shown.",
-    "answer": "Negative, positive, undefined, zero",
-    "points": 200,
-    "unit": "Unit 4: Slope",
-    "images": [
-      "question-assets/final-review-2026/image12.png",
-      "question-assets/final-review-2026/image13.png",
-      "question-assets/final-review-2026/image14.png",
-      "question-assets/final-review-2026/image15.png"
-    ]
-  },
-  {
-    "id": "FR2026-072",
-    "text": "Factor using DOTS.\nx⁴ − 64",
-    "answer": "(x² - 8)(x² + 8)",
-    "points": 200,
-    "unit": "Unit 8: Factoring",
-    "images": [
-      "question-assets/final-review-2026/image46.png"
-    ]
-  },
-  {
-    "id": "FR2026-017",
-    "text": "Solve.\n3x − 7 = 11",
-    "answer": "6",
-    "points": 100,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-006",
-    "text": "Simplify.\n5(x² − 6x + 2)",
-    "answer": "5x² - 30x + 10",
-    "points": 150,
-    "unit": "Unit 1: Distributive Property"
-  },
-  {
-    "id": "FR2026-052",
-    "text": "Solve the system.\n3x − 2y = −11\nx = −2y + 7",
-    "answer": "(-1, 4)",
-    "points": 200,
-    "unit": "Unit 5: Systems"
-  },
-  {
-    "id": "FR2026-008",
-    "text": "Simplify.\n2x + 8 − 7y + 2y − 1 − 9x",
-    "answer": "-7x - 5y + 7",
-    "points": 150,
-    "unit": "Unit 1: Like Terms"
-  },
-  {
-    "id": "FR2026-069",
-    "text": "Find the sum.\n(4x² − 3x + 6) + (−7x² + 3x + 6)",
-    "answer": "-3x² + 12",
-    "points": 150,
-    "unit": "Unit 7: Polynomials"
-  },
-  {
-    "id": "FR2026-019",
-    "text": "Solve.\n7x − 10 = 18",
-    "answer": "4",
-    "points": 100,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-045",
-    "text": "Find the slope of the line through (−1, −2) and (2, 7).",
-    "answer": "3",
-    "points": 150,
-    "unit": "Unit 4: Slope"
-  },
-  {
-    "id": "FR2026-056",
-    "text": "Solve the system.\ny = 3x − 21\ny = −2x + 19",
-    "answer": "(8, 3)",
-    "points": 200,
-    "unit": "Unit 5: Systems"
-  },
-  {
-    "id": "FR2026-074",
-    "text": "Factor.\n8x³ + 12x²",
-    "answer": "4x²(2x + 3)",
-    "points": 150,
-    "unit": "Unit 8: Factoring"
-  },
-  {
-    "id": "FR2026-021",
-    "text": "Solve.\n4(x + 2) − 6 = 18",
-    "answer": "4",
-    "points": 150,
-    "unit": "Unit 2: Solving Equations"
-  },
-  {
-    "id": "FR2026-062",
-    "text": "For the relation shown, list the domain and range. Is it a function?",
-    "answer": "Domain: {-2, 0, 1, 3}; Range: {-2, 3}; Function: yes",
-    "points": 200,
-    "unit": "Unit 6: Relations",
-    "images": [
-      "question-assets/final-review-2026/image34.png"
-    ]
-  },
-  {
-    "id": "FR2026-046",
-    "text": "Find the slope from the table.",
-    "answer": "2",
-    "points": 150,
-    "unit": "Unit 4: Slope",
-    "images": [
-      "question-assets/final-review-2026/image21.png"
-    ]
-  }
+	{
+		"id": "FR2026-010",
+		"text": "Evaluate 2x² + 3y when x = 4 and y = 6.",
+		"answer": "50",
+		"points": 150,
+		"unit": "Unit 1: Evaluating Expressions"
+	},
+	{
+		"id": "FR2026-050",
+		"text": "What is the solution to the system shown on the graph?",
+		"answer": "(-3, 1)",
+		"points": 200,
+		"unit": "Unit 5: Systems",
+		"images": ["question-assets/final-review-2026/image26.png"]
+	},
+	{
+		"id": "FR2026-012",
+		"text": "Solve.\n5x − 8 = 32",
+		"answer": "8",
+		"points": 100,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-031",
+		"text": "A movie ticket is $16 and you have at most $50.\nWhich inequality represents how many tickets t you can buy?",
+		"answer": "16t ≤ 50",
+		"points": 150,
+		"unit": "Unit 3: Inequality Word Problems"
+	},
+	{
+		"id": "FR2026-035",
+		"text": "Write the inequality.\nFive times a number is less than 20.",
+		"answer": "5x < 20",
+		"points": 100,
+		"unit": "Unit 3: Inequality Word Problems"
+	},
+	{
+		"id": "FR2026-047",
+		"text": "Find the slope from the table.",
+		"answer": "0",
+		"points": 150,
+		"unit": "Unit 4: Slope",
+		"images": ["question-assets/final-review-2026/image22.png"]
+	},
+	{
+		"id": "FR2026-023",
+		"text": "Solve.\n6(x + 1) − 8 = 22",
+		"answer": "4",
+		"points": 150,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-030",
+		"text": "Solve the compound inequality.\n−2 < x − 2 ≤ 5",
+		"answer": "0 < x ≤ 7",
+		"points": 200,
+		"unit": "Unit 3: Compound Inequalities"
+	},
+	{
+		"id": "FR2026-076",
+		"text": "Factor completely.\n3x² + 15x + 18",
+		"answer": "3(x + 2)(x + 3)",
+		"points": 200,
+		"unit": "Unit 8: Factoring"
+	},
+	{
+		"id": "FR2026-075",
+		"text": "Factor completely.\nx⁴ − 16",
+		"answer": "(x - 2)(x + 2)(x² + 4)",
+		"points": 200,
+		"unit": "Unit 8: Factoring"
+	},
+	{
+		"id": "FR2026-004",
+		"text": "Simplify.\n2(3x + 4)",
+		"answer": "6x + 8",
+		"points": 100,
+		"unit": "Unit 1: Distributive Property"
+	},
+	{
+		"id": "FR2026-071",
+		"text": "Simplify.\n(2x + 5)(x − 4) + 3x − 9",
+		"answer": "2x² - 29",
+		"points": 200,
+		"unit": "Unit 7: Polynomials"
+	},
+	{
+		"id": "FR2026-061",
+		"text": "What type of function is shown by the graph?",
+		"answer": "Quadratic",
+		"points": 150,
+		"unit": "Unit 6: Function Types",
+		"images": ["question-assets/final-review-2026/image33.png"]
+	},
+	{
+		"id": "FR2026-022",
+		"text": "Solve.\n5(x − 3) + 10 = 0",
+		"answer": "1",
+		"points": 150,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-078",
+		"text": "Use the packet factoring references to choose the best method first.\nWhich method fits x⁴ − 16?",
+		"answer": "DOTS first, then factor completely",
+		"points": 150,
+		"unit": "Unit 8: Factoring",
+		"images": [
+			"question-assets/final-review-2026/image44.png",
+			"question-assets/final-review-2026/image45.png",
+			"question-assets/final-review-2026/image46.png"
+		]
+	},
+	{
+		"id": "FR2026-033",
+		"text": "Solve and graph the solution.\n−6x − 4 > 2x − 20",
+		"answer": "x < 2; open circle at 2, shaded left",
+		"points": 200,
+		"unit": "Unit 3: Inequality Graphs",
+		"images": ["question-assets/final-review-2026/image11.png"]
+	},
+	{
+		"id": "FR2026-027",
+		"text": "Solve.\n2(3x + 4) = 4x + 20",
+		"answer": "6",
+		"points": 200,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-077",
+		"text": "Factor completely.\n−5x² + 5x + 100",
+		"answer": "-5(x - 5)(x + 4)",
+		"points": 200,
+		"unit": "Unit 8: Factoring"
+	},
+	{
+		"id": "FR2026-011",
+		"text": "Evaluate each expression when a = −2 and b = 5.\n1. a² − b\n2. b − a\n3. 2a + 3b\n4. ab − 6a",
+		"answer": "1. -1; 2. 7; 3. 11; 4. 2",
+		"points": 200,
+		"unit": "Unit 1: Evaluating Expressions"
+	},
+	{
+		"id": "FR2026-028",
+		"text": "Solve.\n−3x < 18",
+		"answer": "x > -6",
+		"points": 150,
+		"unit": "Unit 3: Inequalities"
+	},
+	{
+		"id": "FR2026-040",
+		"text": "Find the slope from the table.",
+		"answer": "2",
+		"points": 150,
+		"unit": "Unit 4: Slope",
+		"images": ["question-assets/final-review-2026/image17.png"]
+	},
+	{
+		"id": "FR2026-051",
+		"text": "Solve the system.\ny = 4x + 1\ny = 2x + 5",
+		"answer": "(2, 9)",
+		"points": 200,
+		"unit": "Unit 5: Systems"
+	},
+	{
+		"id": "FR2026-057",
+		"text": "Solve the system.\n8y = 72\n8x + 2y = 10",
+		"answer": "(-1, 9)",
+		"points": 200,
+		"unit": "Unit 5: Systems"
+	},
+	{
+		"id": "FR2026-049",
+		"text": "Find the slope of the graphed line.",
+		"answer": "1",
+		"points": 200,
+		"unit": "Unit 4: Slope",
+		"images": ["question-assets/final-review-2026/image24.jpeg"]
+	},
+	{
+		"id": "FR2026-058",
+		"text": "Which graph is NOT a function?",
+		"answer": "The circle graph is not a function",
+		"points": 200,
+		"unit": "Unit 6: Functions",
+		"images": [
+			"question-assets/final-review-2026/image27.png",
+			"question-assets/final-review-2026/image28.png",
+			"question-assets/final-review-2026/image29.png",
+			"question-assets/final-review-2026/image30.png"
+		]
+	},
+	{
+		"id": "FR2026-066",
+		"text": "For each relation shown, decide whether it is a function.",
+		"answer": "Functions: line, absolute value, upward parabola. Not functions: circle, sideways parabola, sideways V graph.",
+		"points": 200,
+		"unit": "Unit 6: Functions",
+		"images": ["question-assets/final-review-2026/image38.png"]
+	},
+	{
+		"id": "FR2026-032",
+		"text": "Solve and graph the solution.\n3(x − 5) ≤ 15",
+		"answer": "x ≤ 10; closed circle at 10, shaded left",
+		"points": 200,
+		"unit": "Unit 3: Inequality Graphs",
+		"images": ["question-assets/final-review-2026/image11.png"]
+	},
+	{
+		"id": "FR2026-044",
+		"text": "Find the slope of the line through (4, 3) and (8, 6).",
+		"answer": "3/4",
+		"points": 150,
+		"unit": "Unit 4: Slope"
+	},
+	{
+		"id": "FR2026-036",
+		"text": "Write the inequality.\nA number decreased by 7 is no more than 12.",
+		"answer": "x - 7 ≤ 12",
+		"points": 100,
+		"unit": "Unit 3: Inequality Word Problems"
+	},
+	{
+		"id": "FR2026-002",
+		"text": "Simplify.\n12 + 7 − 5 × 6 + 1",
+		"answer": "-10",
+		"points": 100,
+		"unit": "Unit 1: Order of Operations"
+	},
+	{
+		"id": "FR2026-054",
+		"text": "Solve the system.\n4x + 5y = 23\n9x − 5y = −62",
+		"answer": "(-3, 7)",
+		"points": 200,
+		"unit": "Unit 5: Systems"
+	},
+	{
+		"id": "FR2026-018",
+		"text": "Solve.\n4x + 9 = 25",
+		"answer": "4",
+		"points": 100,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-024",
+		"text": "Solve.\n2(x − 5) + 3x = 9",
+		"answer": "19/5",
+		"points": 200,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-026",
+		"text": "Solve.\n5x + 3 = 3x + 15",
+		"answer": "6",
+		"points": 150,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-063",
+		"text": "Is the mapping diagram a function? Explain briefly.",
+		"answer": "Function: each input has one output",
+		"points": 150,
+		"unit": "Unit 6: Functions",
+		"images": ["question-assets/final-review-2026/image35.png"]
+	},
+	{
+		"id": "FR2026-009",
+		"text": "Simplify.\nx² + 9 − 8x + 3x² − 10",
+		"answer": "4x² - 8x - 1",
+		"points": 150,
+		"unit": "Unit 1: Like Terms"
+	},
+	{
+		"id": "FR2026-034",
+		"text": "Write the inequality.\nThree more than a number is at least 10.",
+		"answer": "x + 3 ≥ 10",
+		"points": 100,
+		"unit": "Unit 3: Inequality Word Problems"
+	},
+	{
+		"id": "FR2026-059",
+		"text": "Find the domain and range shown on the graph.",
+		"answer": "Teacher check: use the domain and range marked on the visual",
+		"points": 200,
+		"unit": "Unit 6: Domain and Range",
+		"images": ["question-assets/final-review-2026/image31.png"]
+	},
+	{
+		"id": "FR2026-055",
+		"text": "Solve the system.\nx + 4y = 25\n3x − 6y = −33",
+		"answer": "(1, 6)",
+		"points": 200,
+		"unit": "Unit 5: Systems"
+	},
+	{
+		"id": "FR2026-039",
+		"text": "Find the slope of the line shown.",
+		"answer": "4/3",
+		"points": 150,
+		"unit": "Unit 4: Slope",
+		"images": ["question-assets/final-review-2026/image16.png"]
+	},
+	{
+		"id": "FR2026-014",
+		"text": "Solve.\n9n − 6 = 5n + 18",
+		"answer": "6",
+		"points": 150,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-029",
+		"text": "Which graph represents x ≤ 3?",
+		"answer": "First graph: closed circle at 3, shaded left",
+		"points": 200,
+		"unit": "Unit 3: Inequality Graphs",
+		"images": [
+			"question-assets/final-review-2026/image7.png",
+			"question-assets/final-review-2026/image8.png",
+			"question-assets/final-review-2026/image9.png",
+			"question-assets/final-review-2026/image10.png"
+		]
+	},
+	{
+		"id": "FR2026-068",
+		"text": "Simplify using exponent rules.\nx¹⁰ ÷ x¹⁰",
+		"answer": "1",
+		"points": 100,
+		"unit": "Unit 7: Exponent Rules"
+	},
+	{
+		"id": "FR2026-015",
+		"text": "Solve.\n6y − 3 = 27",
+		"answer": "5",
+		"points": 100,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-025",
+		"text": "Solve.\n4x − 6 = 2x + 10",
+		"answer": "8",
+		"points": 150,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-001",
+		"text": "What is the first step in simplifying this expression?\n8 + 16 ÷ 2 × 5\nA. 8 + 16\nB. 16 ÷ 2\nC. 8 × 5\nD. 2 × 5",
+		"answer": "B. 16 ÷ 2",
+		"points": 100,
+		"unit": "Unit 1: Order of Operations"
+	},
+	{
+		"id": "FR2026-060",
+		"text": "Which table represents a function?",
+		"answer": "Table (4)",
+		"points": 150,
+		"unit": "Unit 6: Functions",
+		"images": ["question-assets/final-review-2026/image32.png"]
+	},
+	{
+		"id": "FR2026-005",
+		"text": "Simplify.\n−4(3x − 9)",
+		"answer": "-12x + 36",
+		"points": 150,
+		"unit": "Unit 1: Distributive Property"
+	},
+	{
+		"id": "FR2026-020",
+		"text": "Solve.\n3(x − 4) + 5 = 20",
+		"answer": "9",
+		"points": 150,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-037",
+		"text": "Solve and graph the compound inequality.\n2 < x + 3 ≤ 7",
+		"answer": "-1 < x ≤ 4; open at -1, closed at 4, shaded between",
+		"points": 200,
+		"unit": "Unit 3: Compound Inequalities",
+		"images": ["question-assets/final-review-2026/image11.png"]
+	},
+	{
+		"id": "FR2026-016",
+		"text": "Solve.\n2x + 5 = 15",
+		"answer": "5",
+		"points": 100,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-003",
+		"text": "Simplify.\n7 + 2 + 2 + 24 × 5",
+		"answer": "131",
+		"points": 100,
+		"unit": "Unit 1: Order of Operations"
+	},
+	{
+		"id": "FR2026-041",
+		"text": "Graph the linear equation.\ny = 1/2x − 5",
+		"answer": "Accept graph with y-intercept -5 and slope 1/2",
+		"points": 200,
+		"unit": "Unit 4: Graphing Lines",
+		"images": ["question-assets/final-review-2026/image18.png"]
+	},
+	{
+		"id": "FR2026-042",
+		"text": "Graph the linear equation.\ny = −2x + 3",
+		"answer": "Accept graph with y-intercept 3 and slope -2",
+		"points": 200,
+		"unit": "Unit 4: Graphing Lines",
+		"images": ["question-assets/final-review-2026/image18.png"]
+	},
+	{
+		"id": "FR2026-007",
+		"text": "Which is NOT a like term of 3y?\nA. 13y\nB. −3y\nC. 4y²\nD. 2.5y",
+		"answer": "C. 4y²",
+		"points": 100,
+		"unit": "Unit 1: Like Terms"
+	},
+	{
+		"id": "FR2026-048",
+		"text": "Find the slope of the graphed line.",
+		"answer": "-2/3",
+		"points": 200,
+		"unit": "Unit 4: Slope",
+		"images": ["question-assets/final-review-2026/image23.png"]
+	},
+	{
+		"id": "FR2026-065",
+		"text": "Is the table a function?",
+		"answer": "No, at least one input has more than one output",
+		"points": 150,
+		"unit": "Unit 6: Functions",
+		"images": ["question-assets/final-review-2026/image37.png"]
+	},
+	{
+		"id": "FR2026-013",
+		"text": "Solve.\n4x + 3 − 2 = 6",
+		"answer": "5/4",
+		"points": 150,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-073",
+		"text": "Which expression is equivalent to x² + 7x + 12?",
+		"answer": "(x + 3)(x + 4)",
+		"points": 150,
+		"unit": "Unit 8: Factoring"
+	},
+	{
+		"id": "FR2026-053",
+		"text": "Solve the system.\n2x + 3y = 15\nx − 3y = 3",
+		"answer": "(6, 1)",
+		"points": 200,
+		"unit": "Unit 5: Systems"
+	},
+	{
+		"id": "FR2026-070",
+		"text": "Multiply.\n(x + 1)(x² + 2x + 3)",
+		"answer": "x³ + 3x² + 5x + 3",
+		"points": 200,
+		"unit": "Unit 7: Polynomials"
+	},
+	{
+		"id": "FR2026-043",
+		"text": "Graph the linear equation.\ny + 1 = 2x + 6",
+		"answer": "y = 2x + 5; accept graph with y-intercept 5 and slope 2",
+		"points": 200,
+		"unit": "Unit 4: Graphing Lines",
+		"images": ["question-assets/final-review-2026/image18.png"]
+	},
+	{
+		"id": "FR2026-067",
+		"text": "What is the degree of this polynomial?\n3x³ + 2x² − 1",
+		"answer": "3",
+		"points": 100,
+		"unit": "Unit 7: Polynomials"
+	},
+	{
+		"id": "FR2026-064",
+		"text": "Is the table a function?",
+		"answer": "Yes, each input has exactly one output",
+		"points": 150,
+		"unit": "Unit 6: Functions",
+		"images": ["question-assets/final-review-2026/image36.png"]
+	},
+	{
+		"id": "FR2026-038",
+		"text": "What type of slope does each graph show?\nGive answers in the order shown.",
+		"answer": "Negative, positive, undefined, zero",
+		"points": 200,
+		"unit": "Unit 4: Slope",
+		"images": [
+			"question-assets/final-review-2026/image12.png",
+			"question-assets/final-review-2026/image13.png",
+			"question-assets/final-review-2026/image14.png",
+			"question-assets/final-review-2026/image15.png"
+		]
+	},
+	{
+		"id": "FR2026-072",
+		"text": "Factor using DOTS.\nx⁴ − 64",
+		"answer": "(x² - 8)(x² + 8)",
+		"points": 200,
+		"unit": "Unit 8: Factoring",
+		"images": ["question-assets/final-review-2026/image46.png"]
+	},
+	{
+		"id": "FR2026-017",
+		"text": "Solve.\n3x − 7 = 11",
+		"answer": "6",
+		"points": 100,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-006",
+		"text": "Simplify.\n5(x² − 6x + 2)",
+		"answer": "5x² - 30x + 10",
+		"points": 150,
+		"unit": "Unit 1: Distributive Property"
+	},
+	{
+		"id": "FR2026-052",
+		"text": "Solve the system.\n3x − 2y = −11\nx = −2y + 7",
+		"answer": "(-1, 4)",
+		"points": 200,
+		"unit": "Unit 5: Systems"
+	},
+	{
+		"id": "FR2026-008",
+		"text": "Simplify.\n2x + 8 − 7y + 2y − 1 − 9x",
+		"answer": "-7x - 5y + 7",
+		"points": 150,
+		"unit": "Unit 1: Like Terms"
+	},
+	{
+		"id": "FR2026-069",
+		"text": "Find the sum.\n(4x² − 3x + 6) + (−7x² + 3x + 6)",
+		"answer": "-3x² + 12",
+		"points": 150,
+		"unit": "Unit 7: Polynomials"
+	},
+	{
+		"id": "FR2026-019",
+		"text": "Solve.\n7x − 10 = 18",
+		"answer": "4",
+		"points": 100,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-045",
+		"text": "Find the slope of the line through (−1, −2) and (2, 7).",
+		"answer": "3",
+		"points": 150,
+		"unit": "Unit 4: Slope"
+	},
+	{
+		"id": "FR2026-056",
+		"text": "Solve the system.\ny = 3x − 21\ny = −2x + 19",
+		"answer": "(8, 3)",
+		"points": 200,
+		"unit": "Unit 5: Systems"
+	},
+	{
+		"id": "FR2026-074",
+		"text": "Factor.\n8x³ + 12x²",
+		"answer": "4x²(2x + 3)",
+		"points": 150,
+		"unit": "Unit 8: Factoring"
+	},
+	{
+		"id": "FR2026-021",
+		"text": "Solve.\n4(x + 2) − 6 = 18",
+		"answer": "4",
+		"points": 150,
+		"unit": "Unit 2: Solving Equations"
+	},
+	{
+		"id": "FR2026-062",
+		"text": "For the relation shown, list the domain and range. Is it a function?",
+		"answer": "Domain: {-2, 0, 1, 3}; Range: {-2, 3}; Function: yes",
+		"points": 200,
+		"unit": "Unit 6: Relations",
+		"images": ["question-assets/final-review-2026/image34.png"]
+	},
+	{
+		"id": "FR2026-046",
+		"text": "Find the slope from the table.",
+		"answer": "2",
+		"points": 150,
+		"unit": "Unit 4: Slope",
+		"images": ["question-assets/final-review-2026/image21.png"]
+	}
 ]

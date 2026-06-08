@@ -12,12 +12,12 @@
 // Firebase gives you — they're safe to commit (client SDK keys are public).
 // ─────────────────────────────────────────────────────────────────────────────
 export const firebaseConfig = {
-  apiKey:        'AIzaSyDQjDhrN7wWHqcpQyiVnANBrM5dAI_rcTg',
-  authDomain:    'foundationsreview.firebaseapp.com',
-  databaseURL:   'https://foundationsreview-default-rtdb.firebaseio.com',
-  projectId:     'foundationsreview',
-  storageBucket: 'foundationsreview.firebasestorage.app',
-  messagingSenderId: '90425928333',
-  appId:         '1:90425928333:web:ca66035d6b01a7964fd0c4',
-  measurementId: 'G-L57R2HFJJB',
+	apiKey: 'AIzaSyDQjDhrN7wWHqcpQyiVnANBrM5dAI_rcTg',
+	authDomain: 'foundationsreview.firebaseapp.com',
+	databaseURL: 'https://foundationsreview-default-rtdb.firebaseio.com',
+	projectId: 'foundationsreview',
+	storageBucket: 'foundationsreview.firebasestorage.app',
+	messagingSenderId: '90425928333',
+	appId: '1:90425928333:web:ca66035d6b01a7964fd0c4',
+	measurementId: 'G-L57R2HFJJB',
 };

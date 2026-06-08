@@ -37,7 +37,7 @@ You'll do this once. Total time: ~15 min.
 1. Go to **https://app.netlify.com** → log in.
 2. Click **Add new site** → **Deploy manually**.
 3. Drag the **`public`** folder (from `math-bowl-netlify/public`) onto the upload
-   area. *(Not the parent folder — just `public`.)*
+   area. _(Not the parent folder — just `public`.)_
 4. Wait ~10s. Netlify gives you a URL like `https://random-name.netlify.app`.
 5. Click **Site configuration** → **Change site name** → pick something like
    `math-bowl-yourname` → save.
@@ -45,6 +45,7 @@ You'll do this once. Total time: ~15 min.
 ### Alternate (Git-based, auto-redeploys on changes)
 
 If you'd rather Netlify auto-deploy whenever you change files:
+
 1. Push this `math-bowl-netlify` folder to a GitHub repo.
 2. In Netlify: **Add new site** → **Import an existing project** → connect GitHub.
 3. Pick the repo. Set **Base directory** to `math-bowl-netlify`,
@@ -68,7 +69,7 @@ If those work, you're done. Send the two URLs to the school.
   in step 11. Edit `public/firebase-config.js`, redeploy.
 - **Page loads but connection status stays "Connecting…"** — check that
   Realtime Database is enabled in your Firebase project (Part 1, step 6).
-- **Teams don't see each other** — confirm both devices are loading the *same*
+- **Teams don't see each other** — confirm both devices are loading the _same_
   Netlify URL, and Firebase Console → Realtime Database shows data appearing.
 - **Buzzes feel slow** — Firebase Realtime Database has ~50-150ms latency
   globally. Acceptable for a classroom buzz-in game.
@@ -79,6 +80,7 @@ If those work, you're done. Send the two URLs to the school.
 ## Costs
 
 Everything here is **free** for classroom use:
+
 - Firebase Spark plan: 100 concurrent connections, 1 GB storage, 10 GB/mo
   transfer. A 30-team classroom is well under all limits.
 - Netlify free tier: 100 GB/mo bandwidth, unlimited static deploys.

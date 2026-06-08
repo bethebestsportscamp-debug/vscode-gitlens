@@ -1,149 +1,159 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Math Bowl</title>
-  <link rel="stylesheet" href="shared.css">
-  <style>
-    body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background:
-        radial-gradient(ellipse at top, rgba(255, 215, 0, .16), transparent 48%),
-        radial-gradient(ellipse at bottom, rgba(124, 77, 255, .18), transparent 55%),
-        var(--bg);
-    }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Math Bowl</title>
+		<link rel="stylesheet" href="shared.css" />
+		<style>
+			body {
+				min-height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 24px;
+				background:
+					radial-gradient(ellipse at top, rgba(255, 215, 0, 0.16), transparent 48%),
+					radial-gradient(ellipse at bottom, rgba(124, 77, 255, 0.18), transparent 55%), var(--bg);
+			}
 
-    .launch {
-      width: min(100%, 720px);
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      text-align: center;
-    }
+			.launch {
+				width: min(100%, 720px);
+				display: flex;
+				flex-direction: column;
+				gap: 24px;
+				text-align: center;
+			}
 
-    .mark {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 76px;
-      height: 76px;
-      margin: 0 auto;
-      border-radius: 22px;
-      background: rgba(255, 215, 0, .14);
-      border: 1px solid rgba(255, 215, 0, .36);
-      color: var(--gold);
-      font-size: 2.4rem;
-      box-shadow: var(--shadow);
-    }
+			.mark {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 76px;
+				height: 76px;
+				margin: 0 auto;
+				border-radius: 22px;
+				background: rgba(255, 215, 0, 0.14);
+				border: 1px solid rgba(255, 215, 0, 0.36);
+				color: var(--gold);
+				font-size: 2.4rem;
+				box-shadow: var(--shadow);
+			}
 
-    h1 {
-      font-size: clamp(3rem, 12vw, 6rem);
-      line-height: .9;
-      font-weight: 950;
-      letter-spacing: 1px;
-      color: var(--gold);
-      text-transform: uppercase;
-    }
+			h1 {
+				font-size: clamp(3rem, 12vw, 6rem);
+				line-height: 0.9;
+				font-weight: 950;
+				letter-spacing: 1px;
+				color: var(--gold);
+				text-transform: uppercase;
+			}
 
-    .subtitle {
-      color: var(--muted);
-      font-size: clamp(1rem, 3vw, 1.2rem);
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
+			.subtitle {
+				color: var(--muted);
+				font-size: clamp(1rem, 3vw, 1.2rem);
+				font-weight: 700;
+				letter-spacing: 1px;
+				text-transform: uppercase;
+			}
 
-    .actions {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      margin-top: 8px;
-    }
+			.actions {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 16px;
+				margin-top: 8px;
+			}
 
-    .launch-card {
-      min-height: 156px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      color: var(--text);
-      text-decoration: none;
-      transition: transform .15s ease, border-color .15s ease, background .15s ease;
-    }
+			.launch-card {
+				min-height: 156px;
+				padding: 24px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 12px;
+				color: var(--text);
+				text-decoration: none;
+				transition:
+					transform 0.15s ease,
+					border-color 0.15s ease,
+					background 0.15s ease;
+			}
 
-    .launch-card:hover {
-      transform: translateY(-3px);
-      border-color: rgba(255, 215, 0, .5);
-      background: rgba(255, 255, 255, .1);
-    }
+			.launch-card:hover {
+				transform: translateY(-3px);
+				border-color: rgba(255, 215, 0, 0.5);
+				background: rgba(255, 255, 255, 0.1);
+			}
 
-    .launch-card:active { transform: scale(.98); }
+			.launch-card:active {
+				transform: scale(0.98);
+			}
 
-    .icon { font-size: 2.5rem; }
+			.icon {
+				font-size: 2.5rem;
+			}
 
-    .label {
-      font-size: 1.45rem;
-      font-weight: 900;
-      color: #fff;
-    }
+			.label {
+				font-size: 1.45rem;
+				font-weight: 900;
+				color: #fff;
+			}
 
-    .detail {
-      color: var(--muted);
-      font-size: .95rem;
-      font-weight: 600;
-    }
+			.detail {
+				color: var(--muted);
+				font-size: 0.95rem;
+				font-weight: 600;
+			}
 
-    .status {
-      padding: 14px 18px;
-      border-radius: var(--radius);
-      background: rgba(0, 230, 118, .1);
-      border: 1px solid rgba(0, 230, 118, .35);
-      color: var(--correct);
-      font-weight: 700;
-      letter-spacing: .5px;
-    }
+			.status {
+				padding: 14px 18px;
+				border-radius: var(--radius);
+				background: rgba(0, 230, 118, 0.1);
+				border: 1px solid rgba(0, 230, 118, 0.35);
+				color: var(--correct);
+				font-weight: 700;
+				letter-spacing: 0.5px;
+			}
 
-    .status::before {
-      content: '●';
-      margin-right: 8px;
-      animation: pulse 1.6s ease-in-out infinite;
-    }
+			.status::before {
+				content: '●';
+				margin-right: 8px;
+				animation: pulse 1.6s ease-in-out infinite;
+			}
 
-    @media (max-width: 620px) {
-      .actions { grid-template-columns: 1fr; }
-      .launch-card { min-height: 132px; }
-    }
-  </style>
-</head>
-<body>
-  <main class="launch">
-    <div class="mark">⚡</div>
-    <div>
-      <h1>Math Bowl</h1>
-      <div class="subtitle">Live classroom review game</div>
-    </div>
+			@media (max-width: 620px) {
+				.actions {
+					grid-template-columns: 1fr;
+				}
+				.launch-card {
+					min-height: 132px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main class="launch">
+			<div class="mark">⚡</div>
+			<div>
+				<h1>Math Bowl</h1>
+				<div class="subtitle">Live classroom review game</div>
+			</div>
 
-    <section class="actions" aria-label="Choose a screen">
-      <a class="card launch-card" href="host.html">
-        <span class="icon">🏆</span>
-        <span class="label">Host Board</span>
-        <span class="detail">Teacher scoreboard</span>
-      </a>
-      <a class="card launch-card" href="team.html">
-        <span class="icon">⚡</span>
-        <span class="label">Team Buzzer</span>
-        <span class="detail">Student team screen</span>
-      </a>
-    </section>
+			<section class="actions" aria-label="Choose a screen">
+				<a class="card launch-card" href="host.html">
+					<span class="icon">🏆</span>
+					<span class="label">Host Board</span>
+					<span class="detail">Teacher scoreboard</span>
+				</a>
+				<a class="card launch-card" href="team.html">
+					<span class="icon">⚡</span>
+					<span class="label">Team Buzzer</span>
+					<span class="detail">Student team screen</span>
+				</a>
+			</section>
 
-    <div class="status">Live and ready — buzz-in synced via Firebase.</div>
-  </main>
-</body>
+			<div class="status">Live and ready — buzz-in synced via Firebase.</div>
+		</main>
+	</body>
 </html>
