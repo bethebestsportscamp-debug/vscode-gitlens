@@ -145,6 +145,9 @@ const COLORS = [
   { name:'Teal',          hex:'#00bcd4' }, { name:'Gold',         hex:'#ffc107' },
 ];
 const CONFETTI = ['🎉','⭐','✨','🌟','💫','🎊','🏆','🎯'];
+const ANSWER_MS = 90000;
+const STEAL_MS = 10000;
+const STEAL_ANSWER_MS = 30000;
 
 let myTeamId  = localStorage.getItem('mathGameTeamId') || null;
 let myAvatar  = AVATARS[0];
@@ -154,6 +157,7 @@ let teams = {};
 let timerIv   = null;
 let hasJoined = false;
 let lastTeamBeepSec = null;
+let lastTeamTimerEnd = 0;
 let lastBuzzTs = 0;
 let lastVerdictTs = 0;
 
@@ -198,6 +202,11 @@ function handleVerdictSounds() {
     if (v.type === 'correct' && v.teamId === myTeamId) { Sounds.fanfare(); Sounds.cheer(); spawnConfetti(); }
     if (v.type === 'wrong'   && v.teamId === myTeamId) {
       Sounds.sadTrombone();
+      document.getElementById('gameContent')?.classList.add('anim-shake');
+      setTimeout(() => document.getElementById('gameContent')?.classList.remove('anim-shake'), 600);
+    }
+    if (v.type === 'timeout' && v.teamId === myTeamId) {
+      Sounds.timeoutHorn();
       document.getElementById('gameContent')?.classList.add('anim-shake');
       setTimeout(() => document.getElementById('gameContent')?.classList.remove('anim-shake'), 600);
     }
@@ -291,7 +300,7 @@ async function doBuzz() {
       s.phase = 'answering';
       s.currentAnswer = '';
       s.isSteal = false;
-      s.timerEnd = Date.now() + 30000;
+      s.timerEnd = Date.now() + ANSWER_MS;
       s.lastBuzzTs = Date.now();
     } else if (s.phase === 'steal' && !s.activeBuzzTeam) {
       if ((s.buzzedTeams || {})[myTeamId]) return; // already used buzz this question
@@ -300,7 +309,7 @@ async function doBuzz() {
       s.phase = 'answering';
       s.currentAnswer = '';
       s.isSteal = true;
-      s.timerEnd = Date.now() + 30000;
+      s.timerEnd = Date.now() + STEAL_ANSWER_MS;
       s.lastBuzzTs = Date.now();
     }
     return s;
@@ -405,7 +414,7 @@ function buildQuestionHTML() {
   } else if (s.phase === 'answering' && isMyTurn) {
     actionHTML = `
       <div class="my-timer">
-        <div class="my-timer-num" id="myTimerNum" style="color:${myColor}">30</div>
+        <div class="my-timer-num" id="myTimerNum" style="color:${myColor}">${Math.round((s.isSteal ? STEAL_ANSWER_MS : ANSWER_MS) / 1000)}</div>
         <div class="timer-wrap" style="max-width:400px;width:100%"><div id="myTimerBar" class="timer-bar"></div></div>
       </div>
       <div class="answer-zone">
@@ -470,10 +479,13 @@ function renderMyTimer() {
   if (!s.timerEnd) return;
   if (!['answering','steal'].includes(s.phase)) return;
   const isMyTurn = s.activeBuzzTeam === myTeamId;
-  const totalMs = s.phase === 'steal' ? 10000 : 30000;
+  const totalMs = s.phase === 'steal' ? STEAL_MS : (s.isSteal ? STEAL_ANSWER_MS : ANSWER_MS);
   const numEl = document.getElementById('myTimerNum');
   const barEl = document.getElementById('myTimerBar');
-  lastTeamBeepSec = null;
+  if (lastTeamTimerEnd !== s.timerEnd) {
+    lastTeamBeepSec = null;
+    lastTeamTimerEnd = s.timerEnd;
+  }
 
   function tick() {
     const remaining = Math.max(0, s.timerEnd - Date.now());
@@ -486,9 +498,9 @@ function renderMyTimer() {
       barEl.style.background = `hsl(${hue}, 90%, 55%)`;
       if (numEl) numEl.style.color = `hsl(${hue}, 90%, 65%)`;
     }
-    if (isMyTurn && secs <= 5 && secs > 0 && secs !== lastTeamBeepSec) {
+    if (isMyTurn && s.phase === 'answering' && secs <= 10 && secs > 0 && secs !== lastTeamBeepSec) {
       lastTeamBeepSec = secs;
-      Sounds.timerBeep(secs <= 2);
+      Sounds.timerBeep(secs <= 3);
     }
     if (remaining === 0) clearInterval(timerIv);
   }

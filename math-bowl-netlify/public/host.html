@@ -26,11 +26,19 @@
     .typing-cursor { display:inline-block; width:2px; height:1.1em; background:currentColor; margin-left:3px; vertical-align:middle; animation:pulse .8s steps(1) infinite; }
     .animal-bubble { position:fixed; top:74px; left:50%; transform:translate(-50%, -18px) scale(.92); opacity:0; pointer-events:none; z-index:260; padding:10px 24px; border-radius:999px; background:rgba(0,0,0,.78); border:2px solid var(--gold); color:var(--gold); font-size:clamp(1.6rem, 4vw, 3.2rem); font-weight:900; letter-spacing:1px; box-shadow:0 16px 40px rgba(0,0,0,.35); }
     .animal-bubble.show { animation:animalPop 1.2s cubic-bezier(.22,1,.36,1) forwards; }
+    .countdown-bubble { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; z-index:240; opacity:0; color:#fff; font-size:clamp(5rem, 18vw, 13rem); font-weight:900; text-shadow:0 0 50px rgba(255,23,68,.85); }
+    .countdown-bubble.show { animation:countdownPop .82s cubic-bezier(.22,1,.36,1) forwards; }
     @keyframes animalPop {
       0% { opacity:0; transform:translate(-50%, -18px) scale(.88) rotate(-2deg); }
       18% { opacity:1; transform:translate(-50%, 0) scale(1.1) rotate(1deg); }
       70% { opacity:1; transform:translate(-50%, 0) scale(1) rotate(0deg); }
       100% { opacity:0; transform:translate(-50%, -30px) scale(.94) rotate(2deg); }
+    }
+    @keyframes countdownPop {
+      0% { opacity:0; transform:scale(.62); }
+      18% { opacity:1; transform:scale(1.08); }
+      68% { opacity:1; transform:scale(1); }
+      100% { opacity:0; transform:scale(.86); }
     }
     .judge-row { display:flex; gap:14px; justify-content:center; }
     .verdict { display:none; position:fixed; inset:0; align-items:center; justify-content:center; font-size:clamp(4rem, 12vw, 9rem); font-weight:900; letter-spacing:4px; z-index:100; pointer-events:none; text-shadow:0 0 60px currentColor; }
@@ -175,6 +183,7 @@
 
 <div id="verdictOverlay" class="verdict"></div>
 <div id="animalBubble" class="animal-bubble"></div>
+<div id="countdownBubble" class="countdown-bubble"></div>
 <div id="connStatus" class="connection-status connecting">Connecting…</div>
 
 <script src="sounds.js"></script>
@@ -216,8 +225,9 @@ async function loadDefaultQuestions() {
     defaultQuestions = FALLBACK_QUESTIONS;
   }
 }
-const ANSWER_MS = 30000;
+const ANSWER_MS = 90000;
 const STEAL_MS  = 10000;
+const STEAL_ANSWER_MS = 30000;
 const VERDICT_PAUSE_MS = 1800;
 
 // ── State ────────────────────────────────────────────────────────────────────
@@ -230,6 +240,7 @@ let teams = {};
 let questions = [];
 let timerInterval = null;
 let lastBeepSec = null;
+let lastTimerEnd = 0;
 let lastBuzzTs = 0;
 let lastVerdictTs = 0;
 let phaseTimer = null;
@@ -299,6 +310,7 @@ function handleVerdictSounds() {
   if (lastVerdictTs > 0) {
     if (v.type === 'correct') { Sounds.fanfare(); Sounds.cheer(); showVerdict('correct', `✓ CORRECT  +${v.points}`); spawnConfetti(); }
     if (v.type === 'wrong')   { Sounds.sadTrombone(); showVerdict('wrong', '✗ WRONG'); }
+    if (v.type === 'timeout') { Sounds.timeoutHorn(); showVerdict('wrong', "TIME'S UP"); }
     if (v.type === 'no_steal'){ Sounds.deflate(); showVerdict('steal', 'NO STEAL', 1500); }
     if (v.type === 'steal_start'){ Sounds.gooseHonk(); }
     if (v.type === 'game_over'){ setTimeout(() => Sounds.elephant(), 300); }
@@ -320,7 +332,7 @@ async function onTimerExpire() {
   const s = gameState;
   if (!s) return;
   if (s.phase === 'answering') {
-    await emitVerdict('wrong', { teamId: s.activeBuzzTeam });
+    await emitVerdict('timeout', { teamId: s.activeBuzzTeam });
     setTimeout(() => { if (s.isSteal) advanceAfterNoSteal(); else startSteal(); }, VERDICT_PAUSE_MS);
   } else if (s.phase === 'steal') {
     await emitVerdict('no_steal');
@@ -560,12 +572,18 @@ function renderAnswer() {
 function renderTimer() {
   clearInterval(timerInterval);
   const s = gameState;
-  if (!s.timerEnd) return;
-  const totalMs = s.phase === 'steal' ? STEAL_MS : ANSWER_MS;
+  if (!s.timerEnd) {
+    hideCountdown();
+    return;
+  }
+  const totalMs = s.phase === 'steal' ? STEAL_MS : (s.isSteal ? STEAL_ANSWER_MS : ANSWER_MS);
   const timerLabel = document.getElementById('timerLabel');
   const timerBar = document.getElementById('timerBar');
   const stealTimer = document.getElementById('stealTimer');
-  lastBeepSec = null;
+  if (lastTimerEnd !== s.timerEnd) {
+    lastBeepSec = null;
+    lastTimerEnd = s.timerEnd;
+  }
 
   function tick() {
     const remaining = Math.max(0, s.timerEnd - Date.now());
@@ -577,7 +595,11 @@ function renderTimer() {
     timerBar.style.width = pct + '%';
     timerBar.style.background = `hsl(${hue}, 90%, 55%)`;
     timerLabel.style.color = `hsl(${hue}, 90%, 70%)`;
-    if (secs <= 5 && secs > 0 && secs !== lastBeepSec) { lastBeepSec = secs; Sounds.timerBeep(secs <= 2); }
+    if (s.phase === 'answering' && secs <= 10 && secs > 0 && secs !== lastBeepSec) {
+      lastBeepSec = secs;
+      showCountdownTick(secs);
+      Sounds.timerBeep(secs <= 3);
+    }
     if (remaining === 0) clearInterval(timerInterval);
   }
   tick();
@@ -640,6 +662,22 @@ function showAnimalCall(animal) {
   el.classList.remove('show');
   void el.offsetWidth;
   el.classList.add('show');
+}
+
+function showCountdownTick(sec) {
+  const el = document.getElementById('countdownBubble');
+  if (!el) return;
+  el.textContent = sec;
+  el.classList.remove('show');
+  void el.offsetWidth;
+  el.classList.add('show');
+}
+
+function hideCountdown() {
+  const el = document.getElementById('countdownBubble');
+  if (!el) return;
+  el.classList.remove('show');
+  el.textContent = '';
 }
 
 function spawnConfetti() {

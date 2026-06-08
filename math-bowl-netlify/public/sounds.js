@@ -147,6 +147,13 @@ const Sounds = {
     sweep(c, { type: 'square', freq1: urgent ? 1100 : 880, start: 0, dur: 0.07, vol: urgent ? 0.14 : 0.09 });
   },
 
+  // ⏰ Timeout buzzer  ——  plays when the answering clock hits zero
+  timeoutHorn() {
+    const c = getCtx();
+    sweep(c, { type: 'square', freq1: 155, freq2: 120, start: 0.00, dur: 0.38, vol: 0.34 });
+    sweep(c, { type: 'square', freq1: 145, freq2: 95,  start: 0.44, dur: 0.50, vol: 0.30 });
+  },
+
   // 🎉 Short crowd cheer stinger  ——  plays alongside confetti on correct
   cheer() {
     const c = getCtx();
