@@ -15,6 +15,8 @@
     .question-box { padding:32px 40px; text-align:center; min-height:140px; display:flex; align-items:center; justify-content:center; flex-direction:column; }
     .unit-label { font-size:.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
     .question-text { font-size:clamp(1.4rem, 3vw, 2.4rem); font-weight:700; line-height:1.6; letter-spacing:.3px; white-space:pre-wrap; }
+    .question-media-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:14px; width:100%; margin-top:20px; }
+    .question-media { width:100%; max-height:360px; object-fit:contain; background:#fff; border-radius:10px; padding:8px; border:1px solid rgba(255,255,255,.18); }
     .buzz-section { display:flex; flex-direction:column; gap:14px; }
     .buzz-header { display:flex; align-items:center; justify-content:space-between; gap:16px; }
     .who-buzzed { font-size:1.4rem; font-weight:800; display:flex; align-items:center; gap:12px; }
@@ -92,7 +94,7 @@
       <div class="card" style="padding:20px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
           <span style="font-weight:700">Question Bank <span id="qBankCount" style="color:var(--gold)"></span></span>
-          <button class="btn btn-ghost" style="font-size:.8rem;padding:6px 12px" onclick="resetQBank()">Reset to Defaults</button>
+          <button class="btn btn-ghost" style="font-size:.8rem;padding:6px 12px" onclick="resetQBank()">Reset to Packet</button>
         </div>
         <div id="qList" class="q-list"></div>
       </div>
@@ -116,6 +118,7 @@
       <div id="questionBox" class="card question-box">
         <div id="unitLabel" class="unit-label"></div>
         <div id="questionText" class="question-text"></div>
+        <div id="questionMedia" class="question-media-grid"></div>
       </div>
       <div id="buzzSection" class="buzz-section" style="display:none">
         <div class="buzz-header">
@@ -187,86 +190,23 @@ const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
 // ── Constants (Algebra Final Review — shuffled across units) ─────────────────
-const DEFAULT_QUESTIONS = [
-  { text: 'Solve the system:\n2x + 3y = 15\nx − 3y = 3', answer: '(6, 1)', points: 200, unit: 'Systems' },
-  { text: 'Solve the system:\n4x + 5y = 23\n9x − 5y = −62', answer: '(-3, 7)', points: 200, unit: 'Systems' },
-  { text: 'What is the degree of:\n3x³ + 2x² − 1', answer: '3', points: 100, unit: 'Polynomials' },
-  { text: 'Simplify:\nx² + 9 − 8x + 3x² − 10', answer: '4x² - 8x - 1', points: 150, unit: 'Like Terms' },
-  { text: 'Solve the system:\n8y = 72\n8x + 2y = 10', answer: '(-1, 9)', points: 200, unit: 'Systems' },
-  { text: 'Factor completely:\n−5x² + 5x + 100', answer: '-5(x - 5)(x + 4)', points: 200, unit: 'Factoring' },
-  { text: 'A movie ticket is $16 and you have at most $50.\nWhich inequality represents how many tickets t you can buy?', answer: '16t ≤ 50', points: 150, unit: 'Inequalities' },
-  { text: 'Solve:\n4x + 3 − 2 = 6', answer: '5/4', points: 150, unit: 'Solving Equations' },
-  { text: 'Multiply:\n(x + 1)(x² + 2x + 3)', answer: 'x³ + 3x² + 5x + 3', points: 200, unit: 'Polynomials' },
-  { text: 'Find the sum:\n(4x² − 3x + 6) + (−7x² + 3x + 6)', answer: '-3x² + 12', points: 150, unit: 'Polynomials' },
-  { text: 'Factor completely:\n3x² + 15x + 18', answer: '3(x + 2)(x + 3)', points: 200, unit: 'Factoring' },
-  { text: 'Solve the system:\ny = 3x − 21\ny = −2x + 19', answer: '(8, 3)', points: 200, unit: 'Systems' },
-  { text: 'Solve:\n4(x − 2) ≥ 8', answer: 'x ≥ 4', points: 150, unit: 'Inequalities' },
-  { text: 'Factor using PSN:\nx² − 9x + 8', answer: '(x - 1)(x - 8)', points: 150, unit: 'Factoring' },
-  { text: 'Simplify:\n(2a²)(3a⁵)', answer: '6a⁷', points: 150, unit: 'Polynomials' },
-  { text: 'Solve:\n4(x + 2) − 6 = 18', answer: '4', points: 150, unit: 'Solving Equations' },
-  { text: 'Solve:\n6(x + 1) − 8 = 22', answer: '4', points: 150, unit: 'Solving Equations' },
-  { text: 'Simplify:\n2x + 8 − 7y + 2y − 1 − 9x', answer: '-7x - 5y + 7', points: 150, unit: 'Like Terms' },
-  { text: 'Multiply:\n(x + 3)(x + 5)', answer: 'x² + 8x + 15', points: 150, unit: 'Polynomials' },
-  { text: 'Simplify (watch negative exponent):\nb⁻⁴ · b⁶', answer: 'b²', points: 150, unit: 'Polynomials' },
-  { text: 'Which inequality represents:\n"A number decreased by 7 is no more than 12"?', answer: 'x - 7 ≤ 12', points: 100, unit: 'Inequalities' },
-  { text: 'Solve:\n2x + 5 = 15', answer: '5', points: 100, unit: 'Solving Equations' },
-  { text: 'Factor completely:\n8x³ + 12x²', answer: '4x²(2x + 3)', points: 150, unit: 'Factoring' },
-  { text: 'Solve:\n3x − 7 = 11', answer: '6', points: 100, unit: 'Solving Equations' },
-  { text: 'Solve:\n4x + 9 = 25', answer: '4', points: 100, unit: 'Solving Equations' },
-  { text: 'Solve:\n−6x − 4 > 2x − 20', answer: 'x < 2', points: 200, unit: 'Inequalities' },
-  { text: 'Solve:\n2(3x + 4) = 4x + 20', answer: '6', points: 200, unit: 'Solving Equations' },
-  { text: 'Multiply:\n(2x − 1)(3x² − 4x + 1)', answer: '6x³ - 11x² + 6x - 1', points: 200, unit: 'Polynomials' },
-  { text: 'Add:\n(3x² + 5x − 2) + (4x² − x + 7)', answer: '7x² + 4x + 5', points: 150, unit: 'Polynomials' },
-  { text: 'Factor completely:\nx⁴ − 16', answer: '(x - 2)(x + 2)(x² + 4)', points: 200, unit: 'Factoring' },
-  { text: 'Find the slope of the line through:\n(4, 3) and (8, 6)', answer: '3/4', points: 150, unit: 'Slope' },
-  { text: 'Factor using DOTS:\nx⁴ − 64', answer: '(x² - 8)(x² + 8)', points: 200, unit: 'Factoring' },
-  { text: 'Simplify:\n7 + 2 + 2 + 24 × 5', answer: '131', points: 100, unit: 'Order of Operations' },
-  { text: 'Solve:\n9n − 6 = 5n + 18', answer: '6', points: 150, unit: 'Solving Equations' },
-  { text: 'Subtract:\n(6y² − 3y + 1) − (2y² + 4y − 5)', answer: '4y² - 7y + 6', points: 200, unit: 'Polynomials' },
-  { text: 'Solve:\n3(x − 4) + 5 = 20', answer: '9', points: 150, unit: 'Solving Equations' },
-  { text: 'Solve:\n−2x + 5 > 9', answer: 'x < -2', points: 150, unit: 'Inequalities' },
-  { text: 'Solve:\n5(x − 3) + 10 = 0', answer: '1', points: 150, unit: 'Solving Equations' },
-  { text: 'Simplify:\n5(x² − 6x + 2)', answer: '5x² - 30x + 10', points: 150, unit: 'Distributive Property' },
-  { text: 'Which is NOT a like term of 3y?\n13y, −3y, 4y², 2.5y', answer: '4y²', points: 100, unit: 'Like Terms' },
-  { text: 'Solve the system:\n3x − 2y = −11\nx = −2y + 7', answer: '(-1, 4)', points: 200, unit: 'Systems' },
-  { text: 'Factor using DOTS:\nx² − 49', answer: '(x - 7)(x + 7)', points: 100, unit: 'Factoring' },
-  { text: 'Evaluate 2x² + 3y\nwhen x = 4, y = 6', answer: '50', points: 150, unit: 'Evaluating Expressions' },
-  { text: 'Solve the system:\nx + 4y = 25\n3x − 6y = −33', answer: '(1, 6)', points: 200, unit: 'Systems' },
-  { text: 'Solve:\n7x − 10 = 18', answer: '4', points: 100, unit: 'Solving Equations' },
-  { text: 'Which is equivalent to x² + 7x + 12?', answer: '(x + 3)(x + 4)', points: 150, unit: 'Factoring' },
-  { text: 'Simplify:\ny⁷ / y²', answer: 'y⁵', points: 100, unit: 'Polynomials' },
-  { text: 'Evaluate a² − b\nwhen a = −2, b = 5', answer: '-1', points: 100, unit: 'Evaluating Expressions' },
-  { text: 'What is the first step in simplifying:\n8 + 16 ÷ 2 × 5', answer: '16 ÷ 2', points: 100, unit: 'Order of Operations' },
-  { text: 'Factor using DOTS:\n9a² − 16b²', answer: '(3a - 4b)(3a + 4b)', points: 200, unit: 'Factoring' },
-  { text: 'Solve:\nx + 4 > 9', answer: 'x > 5', points: 100, unit: 'Inequalities' },
-  { text: 'Factor using PSN:\nx² + 10x + 25', answer: '(x + 5)²', points: 150, unit: 'Factoring' },
-  { text: 'Factor completely:\nx³ − 16x', answer: 'x(x - 4)(x + 4)', points: 200, unit: 'Factoring' },
-  { text: 'Solve:\n4x − 6 = 2x + 10', answer: '8', points: 150, unit: 'Solving Equations' },
-  { text: 'Which inequality represents:\n"Three more than a number is at least 10"?', answer: 'x + 3 ≥ 10', points: 100, unit: 'Inequalities' },
-  { text: 'Find the slope of the line through:\n(−1, −2) and (2, 7)', answer: '3', points: 150, unit: 'Slope' },
-  { text: 'Solve:\n3(x − 5) ≤ 15', answer: 'x ≤ 10', points: 150, unit: 'Inequalities' },
-  { text: 'Solve the system:\ny = 4x + 1\ny = 2x + 5', answer: '(2, 9)', points: 200, unit: 'Systems' },
-  { text: 'Evaluate 2a + 3b\nwhen a = −2, b = 5', answer: '11', points: 100, unit: 'Evaluating Expressions' },
-  { text: 'Factor completely:\n2x³ − 32x', answer: '2x(x - 4)(x + 4)', points: 200, unit: 'Factoring' },
-  { text: 'Simplify:\n12 + 7 − 5 × 6 + 1', answer: '-10', points: 100, unit: 'Order of Operations' },
-  { text: 'Solve:\n3x − 6 ≤ 12', answer: 'x ≤ 6', points: 150, unit: 'Inequalities' },
-  { text: 'Solve the compound inequality:\n−2 < x − 2 ≤ 5', answer: '0 < x ≤ 7', points: 200, unit: 'Inequalities' },
-  { text: 'Solve:\n8x − 9 = 3x + 21', answer: '6', points: 150, unit: 'Solving Equations' },
-  { text: 'Solve:\n5x + 3 = 3x + 15', answer: '6', points: 150, unit: 'Solving Equations' },
-  { text: 'Factor using GCF:\n8y⁴ − 12y²', answer: '4y²(2y² - 3)', points: 150, unit: 'Factoring' },
-  { text: 'Factor completely:\n5x² + 20x + 20', answer: '5(x + 2)²', points: 200, unit: 'Factoring' },
-  { text: 'Simplify:\n−4(3x − 9)', answer: '-12x + 36', points: 150, unit: 'Distributive Property' },
-  { text: 'Simplify using exponent rules:\nx³ · x⁵', answer: 'x⁸', points: 100, unit: 'Polynomials' },
-  { text: 'Evaluate b − a\nwhen a = −2, b = 5', answer: '7', points: 100, unit: 'Evaluating Expressions' },
-  { text: 'Factor using GCF:\n6x³ + 9x²', answer: '3x²(2x + 3)', points: 100, unit: 'Factoring' },
-  { text: 'Evaluate ab − 6a\nwhen a = −2, b = 5', answer: '2', points: 150, unit: 'Evaluating Expressions' },
-  { text: 'Solve:\n6y − 3 = 27', answer: '5', points: 100, unit: 'Solving Equations' },
-  { text: 'Solve:\n7x + 4 = 5x + 18', answer: '7', points: 150, unit: 'Solving Equations' },
-  { text: 'Solve:\n−3x < 18', answer: 'x > -6', points: 150, unit: 'Inequalities' },
-  { text: 'Which inequality represents:\n"Five times a number is less than 20"?', answer: '5x < 20', points: 100, unit: 'Inequalities' },
-  { text: 'Simplify:\n2(3x + 4)', answer: '6x + 8', points: 100, unit: 'Distributive Property' },
-  { text: 'Solve:\n5x − 8 = 32', answer: '8', points: 100, unit: 'Solving Equations' },
+const FALLBACK_QUESTIONS = [
+  { text: 'Packet question bank did not load. Refresh the host page.', answer: 'Teacher check', points: 100, unit: 'Setup' },
 ];
+let defaultQuestions = FALLBACK_QUESTIONS;
+
+async function loadDefaultQuestions() {
+  try {
+    const res = await fetch('./packet-questions.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`Question bank HTTP ${res.status}`);
+    const loaded = await res.json();
+    if (!Array.isArray(loaded) || loaded.length === 0) throw new Error('Question bank is empty');
+    defaultQuestions = loaded;
+  } catch (e) {
+    console.error('Question bank load failed', e);
+    defaultQuestions = FALLBACK_QUESTIONS;
+  }
+}
 const ANSWER_MS = 30000;
 const STEAL_MS  = 10000;
 const VERDICT_PAUSE_MS = 1800;
@@ -299,7 +239,7 @@ async function initGameIfMissing() {
         buzzedTeams: {}, timerEnd: 0, isSteal: false,
         currentQ: null, lastBuzzTs: 0, lastVerdictTs: 0, lastVerdict: null,
       },
-      questions: DEFAULT_QUESTIONS,
+      questions: defaultQuestions,
       teams: {},
     });
   }
@@ -474,8 +414,8 @@ window.removeQuestion = async (i) => {
 
 window.resetQBank = async () => {
   if (gameState && gameState.phase !== 'lobby') return;
-  if (!confirm('Reset to default questions? This will remove any custom questions.')) return;
-  await set(questionsRef, DEFAULT_QUESTIONS);
+  if (!confirm('Reset to the Final Review Packet 2026 questions? This will remove any custom questions.')) return;
+  await set(questionsRef, defaultQuestions);
 };
 
 window.skipQuestion = async () => {
@@ -503,6 +443,28 @@ window.confirmReset = async () => {
 // ── Rendering (mostly unchanged from server-based version) ───────────────────
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+function questionImages(q) {
+  if (!q) return [];
+  const imgs = Array.isArray(q.images) ? q.images : (q.image ? [q.image] : []);
+  return imgs.filter(Boolean);
+}
+
+function questionAnswer(q) {
+  return q?.answer || 'Teacher check';
+}
+
+function renderQuestionMedia(q) {
+  const el = document.getElementById('questionMedia');
+  const imgs = questionImages(q);
+  if (!imgs.length) {
+    el.innerHTML = '';
+    el.style.display = 'none';
+    return;
+  }
+  el.style.display = 'grid';
+  el.innerHTML = imgs.map((src, i) => `<img class="question-media" src="${esc(src)}" alt="Question visual ${i + 1}">`).join('');
+}
+
 function render() {
   const s = gameState;
   if (!s) return;
@@ -515,7 +477,7 @@ function render() {
   document.getElementById('gameOverView').style.display = s.phase === 'game_over' ? 'flex' : 'none';
   document.getElementById('skipBtn').style.display      = ['question','steal','judging','answering'].includes(s.phase) ? 'block' : 'none';
   document.getElementById('answerKey').style.display    = s.currentQ ? 'block' : 'none';
-  if (s.currentQ) document.getElementById('answerKeyText').textContent = '→ ' + s.currentQ.answer;
+  if (s.currentQ) document.getElementById('answerKeyText').textContent = '→ ' + questionAnswer(s.currentQ);
 
   if (s.phase === 'lobby') renderLobby();
   if (['question','answering','judging','steal'].includes(s.phase)) renderQuestion();
@@ -535,7 +497,8 @@ function renderLobby() {
       <div style="flex:1">
         ${q.unit ? `<div style="font-size:.7rem;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">${esc(q.unit)}</div>` : ''}
         <div class="q-item-text" style="white-space:pre-wrap">${esc(q.text)}</div>
-        <div class="q-item-ans">✓ ${esc(q.answer)}</div>
+        <div class="q-item-ans">✓ ${esc(questionAnswer(q))}</div>
+        ${questionImages(q).length ? `<div class="q-item-ans" style="color:var(--muted)">Visuals: ${questionImages(q).length}</div>` : ''}
       </div>
       <span class="q-item-pts">${q.points}pts</span>
       <button onclick="removeQuestion(${i})" title="Remove">✕</button>
@@ -547,6 +510,7 @@ function renderQuestion() {
   if (!s.currentQ) return;
   document.getElementById('unitLabel').textContent = s.currentQ.unit || '';
   document.getElementById('questionText').textContent = s.currentQ.text;
+  renderQuestionMedia(s.currentQ);
 
   const buzzSec = document.getElementById('buzzSection');
   const waitMsg = document.getElementById('waitingMsg');
@@ -559,7 +523,7 @@ function renderQuestion() {
   stealBan.classList.toggle('show', s.phase === 'steal');
   judgeRow.style.display = s.phase === 'judging' ? 'flex' : 'none';
   revealDiv.style.display = s.phase === 'judging' ? 'block' : 'none';
-  if (s.phase === 'judging') revealDiv.textContent = '📖 Correct Answer: ' + s.currentQ.answer;
+  if (s.phase === 'judging') revealDiv.textContent = '📖 Correct Answer: ' + questionAnswer(s.currentQ);
 
   if (['answering','judging'].includes(s.phase) && s.activeBuzzTeam) {
     const team = teams[s.activeBuzzTeam];
@@ -677,6 +641,7 @@ function spawnConfetti() {
 // ── Boot ─────────────────────────────────────────────────────────────────────
 (async () => {
   try {
+    await loadDefaultQuestions();
     await initGameIfMissing();
     subscribe();
   } catch (e) {
