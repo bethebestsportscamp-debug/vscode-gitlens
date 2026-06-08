@@ -24,6 +24,14 @@
     .answer-display { padding:20px 28px; font-size:clamp(1.2rem, 2.5vw, 2rem); font-weight:600; min-height:70px; display:flex; align-items:center; letter-spacing:.5px; border-left:4px solid var(--buzz); word-break:break-word; position:relative; }
     .answer-placeholder { color:var(--muted); font-style:italic; font-size:1.1rem; font-weight:400; }
     .typing-cursor { display:inline-block; width:2px; height:1.1em; background:currentColor; margin-left:3px; vertical-align:middle; animation:pulse .8s steps(1) infinite; }
+    .animal-bubble { position:fixed; top:74px; left:50%; transform:translate(-50%, -18px) scale(.92); opacity:0; pointer-events:none; z-index:260; padding:10px 24px; border-radius:999px; background:rgba(0,0,0,.78); border:2px solid var(--gold); color:var(--gold); font-size:clamp(1.6rem, 4vw, 3.2rem); font-weight:900; letter-spacing:1px; box-shadow:0 16px 40px rgba(0,0,0,.35); }
+    .animal-bubble.show { animation:animalPop 1.2s cubic-bezier(.22,1,.36,1) forwards; }
+    @keyframes animalPop {
+      0% { opacity:0; transform:translate(-50%, -18px) scale(.88) rotate(-2deg); }
+      18% { opacity:1; transform:translate(-50%, 0) scale(1.1) rotate(1deg); }
+      70% { opacity:1; transform:translate(-50%, 0) scale(1) rotate(0deg); }
+      100% { opacity:0; transform:translate(-50%, -30px) scale(.94) rotate(2deg); }
+    }
     .judge-row { display:flex; gap:14px; justify-content:center; }
     .verdict { display:none; position:fixed; inset:0; align-items:center; justify-content:center; font-size:clamp(4rem, 12vw, 9rem); font-weight:900; letter-spacing:4px; z-index:100; pointer-events:none; text-shadow:0 0 60px currentColor; }
     .verdict.show { display:flex; animation:zoomIn .4s cubic-bezier(.22,1,.36,1); }
@@ -166,6 +174,7 @@
 </div>
 
 <div id="verdictOverlay" class="verdict"></div>
+<div id="animalBubble" class="animal-bubble"></div>
 <div id="connStatus" class="connection-status connecting">Connecting…</div>
 
 <script src="sounds.js"></script>
@@ -275,7 +284,8 @@ function handleBuzzSound() {
   if (!gameState) return;
   const ts = gameState.lastBuzzTs || 0;
   if (ts > lastBuzzTs && lastBuzzTs > 0) {
-    Sounds.quack();
+    const animal = Sounds.animalBuzz();
+    showAnimalCall(animal);
     buzzFlash(gameState.activeBuzzTeam);
   }
   lastBuzzTs = ts;
@@ -621,6 +631,15 @@ function buzzFlash(teamId) {
   if (!team) return;
   document.body.style.outline = `6px solid ${team.color}`;
   setTimeout(() => { document.body.style.outline = ''; }, 600);
+}
+
+function showAnimalCall(animal) {
+  const el = document.getElementById('animalBubble');
+  if (!el || !animal) return;
+  el.textContent = `${animal.emoji} ${animal.call}`;
+  el.classList.remove('show');
+  void el.offsetWidth;
+  el.classList.add('show');
 }
 
 function spawnConfetti() {

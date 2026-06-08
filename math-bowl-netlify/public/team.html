@@ -182,7 +182,7 @@ function handleBuzzSound() {
   if (!gameState) return;
   const ts = gameState.lastBuzzTs || 0;
   if (ts > lastBuzzTs && lastBuzzTs > 0 && gameState.activeBuzzTeam === myTeamId) {
-    Sounds.quack();
+    Sounds.animalBuzz();
     document.getElementById('gameContent')?.classList.add('anim-flash');
     setTimeout(() => document.getElementById('gameContent')?.classList.remove('anim-flash'), 1500);
   }

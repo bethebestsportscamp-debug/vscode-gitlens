@@ -29,11 +29,64 @@ function sweep(c, { type = 'sawtooth', freq1, freq2, start = 0, dur = 0.2, vol =
 // ── Sound Library ─────────────────────────────────────────────────────────────
 const Sounds = {
 
-  // 🦆 Duck quack × 2  ——  plays when any team buzzes in
+  // Random animal buzzer  ——  plays when a team buzzes in
+  animalBuzz() {
+    const animals = [
+      { emoji: '🐄', call: 'MOO!', name: 'Cow', play: () => this.moo() },
+      { emoji: '🦆', call: 'QUACK!', name: 'Duck', play: () => this.quack() },
+      { emoji: '🐑', call: 'BAAA!', name: 'Sheep', play: () => this.baa() },
+      { emoji: '🐷', call: 'OINK!', name: 'Pig', play: () => this.oink() },
+      { emoji: '🐔', call: 'CLUCK!', name: 'Chicken', play: () => this.cluck() },
+      { emoji: '🐸', call: 'RIBBIT!', name: 'Frog', play: () => this.ribbit() },
+    ];
+    const pick = animals[Math.floor(Math.random() * animals.length)];
+    pick.play();
+    return pick;
+  },
+
+  // 🐄 Cow moo
+  moo() {
+    const c = getCtx();
+    sweep(c, { type: 'sine', freq1: 180, freq2: 92, start: 0.00, dur: 0.48, vol: 0.34 });
+    sweep(c, { type: 'triangle', freq1: 140, freq2: 82, start: 0.18, dur: 0.62, vol: 0.25 });
+  },
+
+  // 🦆 Duck quack × 2
   quack() {
     const c = getCtx();
     sweep(c, { type: 'sawtooth', freq1: 520, freq2: 210, start: 0.00, dur: 0.17, vol: 0.38 });
     sweep(c, { type: 'sawtooth', freq1: 490, freq2: 195, start: 0.24, dur: 0.17, vol: 0.33 });
+  },
+
+  // 🐑 Sheep baa
+  baa() {
+    const c = getCtx();
+    sweep(c, { type: 'sawtooth', freq1: 430, freq2: 310, start: 0.00, dur: 0.22, vol: 0.28 });
+    sweep(c, { type: 'sawtooth', freq1: 455, freq2: 300, start: 0.18, dur: 0.24, vol: 0.24 });
+    sweep(c, { type: 'triangle', freq1: 385, freq2: 270, start: 0.38, dur: 0.30, vol: 0.20 });
+  },
+
+  // 🐷 Pig oink
+  oink() {
+    const c = getCtx();
+    sweep(c, { type: 'square', freq1: 245, freq2: 125, start: 0.00, dur: 0.13, vol: 0.30 });
+    sweep(c, { type: 'sawtooth', freq1: 190, freq2: 92, start: 0.16, dur: 0.18, vol: 0.36 });
+    sweep(c, { type: 'square', freq1: 260, freq2: 118, start: 0.36, dur: 0.12, vol: 0.26 });
+  },
+
+  // 🐔 Chicken cluck
+  cluck() {
+    const c = getCtx();
+    sweep(c, { type: 'square', freq1: 820, freq2: 320, start: 0.00, dur: 0.07, vol: 0.22 });
+    sweep(c, { type: 'square', freq1: 760, freq2: 280, start: 0.10, dur: 0.06, vol: 0.20 });
+    sweep(c, { type: 'square', freq1: 900, freq2: 350, start: 0.20, dur: 0.08, vol: 0.24 });
+  },
+
+  // 🐸 Frog ribbit
+  ribbit() {
+    const c = getCtx();
+    sweep(c, { type: 'sawtooth', freq1: 135, freq2: 78, start: 0.00, dur: 0.18, vol: 0.30 });
+    sweep(c, { type: 'sawtooth', freq1: 145, freq2: 82, start: 0.26, dur: 0.22, vol: 0.34 });
   },
 
   // 😢 Sad trombone  ——  plays on wrong answer  ("wah  wah  wah  waaaaaah")
