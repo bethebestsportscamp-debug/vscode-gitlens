@@ -26,20 +26,73 @@ function sweep(c, { type = 'sawtooth', freq1, freq2, start = 0, dur = 0.2, vol =
 	osc.stop(t + dur + 0.02);
 }
 
+function sayAnimal(text, { pitch = 1, rate = 1 } = {}) {
+	if (!('speechSynthesis' in window) || !window.SpeechSynthesisUtterance) return;
+	const utterance = new SpeechSynthesisUtterance(text);
+	utterance.volume = 0.85;
+	utterance.pitch = pitch;
+	utterance.rate = rate;
+	window.speechSynthesis.cancel();
+	window.speechSynthesis.speak(utterance);
+}
+
 // ── Sound Library ─────────────────────────────────────────────────────────────
 const Sounds = {
 	// Random animal buzzer  ——  plays when a team buzzes in
 	animalBuzz() {
 		const animals = [
-			{ emoji: '🐄', call: 'MOO!', name: 'Cow', play: () => this.moo() },
-			{ emoji: '🦆', call: 'QUACK!', name: 'Duck', play: () => this.quack() },
-			{ emoji: '🐑', call: 'BAAA!', name: 'Sheep', play: () => this.baa() },
-			{ emoji: '🐷', call: 'OINK!', name: 'Pig', play: () => this.oink() },
-			{ emoji: '🐔', call: 'CLUCK!', name: 'Chicken', play: () => this.cluck() },
-			{ emoji: '🐸', call: 'RIBBIT!', name: 'Frog', play: () => this.ribbit() },
+			{
+				emoji: '🐄',
+				call: 'MOO!',
+				name: 'Cow',
+				spoken: 'Moooo!',
+				voice: { pitch: 0.55, rate: 0.72 },
+				play: () => this.moo(),
+			},
+			{
+				emoji: '🦆',
+				call: 'QUACK!',
+				name: 'Duck',
+				spoken: 'Quack quack!',
+				voice: { pitch: 1.35, rate: 1.15 },
+				play: () => this.quack(),
+			},
+			{
+				emoji: '🐑',
+				call: 'BAAA!',
+				name: 'Sheep',
+				spoken: 'Baaa!',
+				voice: { pitch: 1.18, rate: 0.85 },
+				play: () => this.baa(),
+			},
+			{
+				emoji: '🐷',
+				call: 'OINK!',
+				name: 'Pig',
+				spoken: 'Oink oink!',
+				voice: { pitch: 0.82, rate: 1.05 },
+				play: () => this.oink(),
+			},
+			{
+				emoji: '🐔',
+				call: 'CLUCK!',
+				name: 'Chicken',
+				spoken: 'Cluck cluck!',
+				voice: { pitch: 1.5, rate: 1.25 },
+				play: () => this.cluck(),
+			},
+			{
+				emoji: '🐸',
+				call: 'RIBBIT!',
+				name: 'Frog',
+				spoken: 'Ribbit!',
+				voice: { pitch: 0.7, rate: 0.78 },
+				play: () => this.ribbit(),
+			},
 		];
 		const pick = animals[Math.floor(Math.random() * animals.length)];
 		pick.play();
+		sayAnimal(pick.spoken, pick.voice);
 		return pick;
 	},
 

@@ -761,6 +761,7 @@
 			let lastBuzzTs = 0;
 			let lastVerdictTs = 0;
 			let phaseTimer = null;
+			let buzzSoundReady = false;
 			const CONFETTI = ['🎉', '⭐', '✨', '🌟', '💫', '🎊', '🏆', '🎯'];
 
 			// Unlock audio on first click
@@ -824,7 +825,12 @@
 			function handleBuzzSound() {
 				if (!gameState) return;
 				const ts = gameState.lastBuzzTs || 0;
-				if (ts > lastBuzzTs && lastBuzzTs > 0) {
+				if (!buzzSoundReady) {
+					lastBuzzTs = ts;
+					buzzSoundReady = true;
+					return;
+				}
+				if (ts > lastBuzzTs && gameState.activeBuzzTeam) {
 					const animal = Sounds.animalBuzz();
 					showAnimalCall(animal);
 					buzzFlash(gameState.activeBuzzTeam);
@@ -1045,11 +1051,9 @@
 			};
 
 			window.confirmReset = async () => {
-				if (!confirm('Reset the game? Scores will be cleared and everyone returns to lobby.')) return;
+				if (!confirm('Reset the game? Team names will be cleared and everyone returns to setup.')) return;
+				clearTimeout(phaseTimer);
 				const updates = {};
-				Object.keys(teams).forEach(id => {
-					updates[`game/teams/${id}/score`] = 0;
-				});
 				updates['game/state'] = {
 					phase: 'lobby',
 					qIndex: 0,
@@ -1063,6 +1067,7 @@
 					lastVerdictTs: 0,
 					lastVerdict: null,
 				};
+				updates['game/teams'] = null;
 				await update(ref(db), updates);
 			};
 

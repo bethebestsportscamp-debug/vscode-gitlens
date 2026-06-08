@@ -566,8 +566,16 @@
 			let lastLocalBuzzSoundAt = 0;
 			let lastBuzzTs = 0;
 			let lastVerdictTs = 0;
+			let buzzSoundReady = false;
+			let teamsLoaded = false;
 
-			document.addEventListener('click', () => getCtx(), { once: true });
+			function unlockAudio() {
+				try {
+					getCtx();
+				} catch (_e) {}
+			}
+			document.addEventListener('pointerdown', unlockAudio, { once: true });
+			document.addEventListener('keydown', unlockAudio, { once: true });
 
 			// ── Connection status ────────────────────────────────────────────────────────
 			onValue(ref(db, '.info/connected'), snap => {
@@ -584,19 +592,33 @@
 			// ── Subscriptions ────────────────────────────────────────────────────────────
 			onValue(stateRef, snap => {
 				gameState = snap.val() || {};
+				if (teamsLoaded && myTeamId && gameState.phase === 'lobby' && !teams[myTeamId]) {
+					returnToSetup();
+					return;
+				}
 				handleBuzzSound();
 				handleVerdictSounds();
 				if (hasJoined || myTeamId) render();
 			});
 			onValue(teamsRef, snap => {
 				teams = snap.val() || {};
+				teamsLoaded = true;
+				if (myTeamId && gameState?.phase === 'lobby' && !teams[myTeamId]) {
+					returnToSetup();
+					return;
+				}
 				if (hasJoined || myTeamId) renderScoreStrip();
 			});
 
 			function handleBuzzSound() {
 				if (!gameState) return;
 				const ts = gameState.lastBuzzTs || 0;
-				if (ts > lastBuzzTs && lastBuzzTs > 0 && gameState.activeBuzzTeam === myTeamId) {
+				if (!buzzSoundReady) {
+					lastBuzzTs = ts;
+					buzzSoundReady = true;
+					return;
+				}
+				if (ts > lastBuzzTs && gameState.activeBuzzTeam === myTeamId) {
 					if (Date.now() - lastLocalBuzzSoundAt > 1800) Sounds.animalBuzz();
 					flashBuzzFeedback();
 				}
@@ -671,6 +693,33 @@
 				document.getElementById('previewBadge').innerHTML = `
     <span style="font-size:1.8rem">${myAvatar}</span>
     <span style="color:${myColor};font-size:1.2rem;font-weight:800;margin-left:8px">${esc(name)}</span>`;
+			}
+
+			function returnToSetup() {
+				clearInterval(timerIv);
+				hasJoined = false;
+				myTeamId = null;
+				myAvatar = AVATARS[0];
+				myColor = COLORS[0].hex;
+				lastTeamBeepSec = null;
+				lastTeamTimerEnd = 0;
+				lastLocalBuzzSoundAt = 0;
+				localStorage.removeItem('mathGameTeamId');
+				localStorage.removeItem('mathGameTeam');
+
+				document.getElementById('nameInput').value = '';
+				document.querySelectorAll('.avatar-opt').forEach((el, i) => el.classList.toggle('picked', i === 0));
+				document.querySelectorAll('.color-opt').forEach((el, i) => el.classList.toggle('picked', i === 0));
+				updatePreview();
+
+				document.getElementById('hAvatar').textContent = myAvatar;
+				document.getElementById('hName').textContent = 'Team';
+				document.getElementById('hName').style.color = '#fff';
+				document.getElementById('hScore').textContent = '0';
+				document.getElementById('gameContent').innerHTML = '';
+				document.getElementById('scoreStrip').innerHTML = '';
+				document.getElementById('gameScreen').style.display = 'none';
+				document.getElementById('setupScreen').style.display = 'flex';
 			}
 
 			window.joinGame = async () => {
